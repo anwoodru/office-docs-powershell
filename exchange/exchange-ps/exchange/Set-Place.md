@@ -16,7 +16,7 @@ This cmdlet is available only in the cloud-based service.
 
 Use the Set-Place cmdlet to update room mailboxes with additional metadata, which provides a better search and room suggestion experience.
 
-**Note**: In hybrid environments, this cmdlet doesn't work on the following properties on synchronized room mailboxes: City, CountryOrRegion, GeoCoordinates, Phone, PostalCode, State, and Street. To modify these properties on synchronized room mailboxes, use the Set-User or Set-Mailbox cmdlets in on-premises Exchange.
+**Note**: In hybrid environments, this cmdlet doesn't work on the following properties on synchronized room mailboxes: City, CountryOrRegion, GeoCoordinates, Phone, PostalCode, State, and Street. To modify these properties except GeoCoordinates on synchronized room mailboxes, use the Set-User or Set-Mailbox cmdlets in on-premises Exchange.
 
 **Note**: We recommend that you use the Exchange Online PowerShell V2 module to connect to Exchange Online PowerShell. For instructions, see [Connect to Exchange Online PowerShell](https://docs.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell).
 
@@ -40,7 +40,6 @@ Set-Place [-Identity] <RecipientIdParameter>
  [-Label <String>]
  [-Phone <String>]
  [-PostalCode <String>]
- [-SpaceType <String>]
  [-State <String>]
  [-Street <String>]
  [-Tags <String[]>]
@@ -320,26 +319,6 @@ Accept wildcard characters: False
 
 ### -PostalCode
 The PostalCode parameter specifies the room's postal code.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Applicable: Exchange Online
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SpaceType
-The SpaceType parameter specifies the type of space. Valid values are:
-
-- CustomerSpace
-- WorkArea
-- Custom
 
 ```yaml
 Type: String

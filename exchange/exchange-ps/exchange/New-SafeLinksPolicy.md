@@ -27,17 +27,24 @@ New-SafeLinksPolicy [-Name] <String>
  [-AdminDisplayName <String>]
  [-AllowClickThrough <Boolean>]
  [-Confirm]
+ [-CustomNotificationText <String>]
  [-DeliverMessageAfterScan <Boolean>]
+ [-DisableUrlRewrite <Boolean>]
  [-DoNotAllowClickThrough <Boolean>]
  [-DoNotRewriteUrls <MultiValuedProperty>]
  [-DoNotTrackUserClicks <Boolean>]
  [-EnableForInternalSenders <Boolean>]
+ [-EnableOrganizationBranding <Boolean>]
  [-EnableSafeLinksForTeams <Boolean>]
  [-ExcludedUrls <String[]>]
  [-IsEnabled <Boolean>]
+ [-MakeBuiltInProtection]
+ [-RecommendedPolicyType <RecommendedPolicyType>]
  [-ScanUrls <Boolean>]
  [-TrackClicks <Boolean>]
+ [-UseTranslatedNotificationText <Boolean>]
  [-WhatIf]
+ [-DisableUrlRewrite <Boolean>]
  [-WhiteListedUrls <String>]
  [<CommonParameters>]
 ```
@@ -53,14 +60,14 @@ You need to be assigned permissions before you can run this cmdlet. Although thi
 
 ### Example 1
 ```powershell
-New-SafeLinksPolicy -Name "Marketing Block URL" -IsEnabled $true -TrackClicks $true
+New-SafeLinksPolicy -Name "Marketing Block URL" -IsEnabled $true
 ```
 
 This example creates a new Safe Links policy named Marketing Block URL with the following options:
 
 - The policy is enabled.
 - Users aren't allowed to click through to the original URL. This is the default value of the DoNotAllowClickThrough parameter, so you don't need to specify it.
-- User clicks on URLs are tracked in URL trace.
+- User clicks on URLs are tracked. This is the default value of the DoNotTrackUserClicks parameter, so you don't need to specify it.
 
 ## PARAMETERS
 
@@ -131,11 +138,46 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -CustomNotificationText
+The custom notification text specifies the customized notification text to show to users. If the value contains spaces, enclose the value in quotation marks (").
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DeliverMessageAfterScan
 The DeliverMessageAfterScan parameter specifies whether to deliver email messages only after Safe Links scanning is complete. Valid values are:
 
-- $true: Wait until Safe Links scanning is complete before delivering the message.
+- $true: Wait until Safe Links scanning is complete before delivering the message. Messages that contain malicious links are not delivered.
 - $false: If Safe Links scanning can't complete, deliver the message anyway. This is the default value.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableUrlRewrite
+The DisableUrlRewrite parameter specifies whether to rewrite (wrap) URLs in email messages. Valid values are:
+
+- $true: URLs in messages are not rewritten, but messages are still scanned by Safe Links prior to delivery. Time of click checks on links are done using the Safe Links API in supported Outlook clients (currently, Outlook for Windows and Outlook for Mac). Typically, we don't recommend using this value.
+- $false: URLs in messages are rewritten. API checks still occur on unwrapped URLs in supported clients if the user is in a valid Safe Links policy. This is the default value.
 
 ```yaml
 Type: Boolean
@@ -229,12 +271,29 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -EnableSafeLinksForTeams
-**Note**: As of March 2020, this parameter is in Preview and is available only for members of the Microsoft Teams Technology Adoption Program (TAP).
+### -EnableOrganizationBranding
+The EnableOrganizationBranding parameter specifies whether your organization's logo is displayed on Safe Links warning and notification pages. Valid values are:
 
+- $true: Organization branding is displayed on Safe Links warning and notification pages. Before you configure this value, you need to follow the instructions in [Customize the Microsoft 365 theme for your organization](https://docs.microsoft.com/microsoft-365/admin/setup/customize-your-organization-theme) to upload your company logo.
+- $false: Organization branding is not displayed on Safe Links warning and notification pages.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableSafeLinksForTeams
 The EnableSafeLinksForTeams parameter specifies whether Safe Links is enabled for Microsoft Teams. Valid values are:
 
-- $true: Safe Links is enabled for Teams. If a protected user clicks a malicious link in a Teams conversation, group chat, or from channels, a warning page will appear in the default web browser.
+- $true: Safe Links is enabled for Teams. When a user clicks a link in a Teams conversation, group chat, or from channels, the link is checked by Safe Links. If the link is found to be malicious, a warning page appears in the default web browser.
 - $false: Safe Links isn't enabled for Teams. This is the default value.
 
 ```yaml
@@ -285,6 +344,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -MakeBuiltInProtection
+This parameter is reserved for internal Microsoft use.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RecommendedPolicyType
+The RecommendedPolicyType parameter is used for Standard and Strict policy creation as part of [Preset security policies](https://docs.microsoft.com/microsoft-365/security/office-365-security/preset-security-policies). Don't use this parameter yourself.
+
+```yaml
+Type: RecommendedPolicyType
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ScanUrls
 The ScanUrls parameter specifies whether to enable or disable real-time scanning of clicked links in email messages. Valid values are:
 
@@ -306,6 +397,25 @@ Accept wildcard characters: False
 
 ### -TrackClicks
 This parameter has been deprecated. Use the DoNotTrackUserClicks parameter instead.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseTranslatedNotificationText
+The UseTranslatedNotificationText specifies whether to use Microsoft Translator to automatically localize the custom notification text that you specified with the CustomNotificationText parameter. Valid values are:
+
+- $true: Translate custom notification text to the user's language.
+- $false: Don't translate custom notification text to the user's language. This is the default value.
 
 ```yaml
 Type: Boolean

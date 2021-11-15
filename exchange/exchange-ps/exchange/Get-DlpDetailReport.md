@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.Exchange.ServerStatus-Help.xml
 online version: https://docs.microsoft.com/powershell/module/exchange/get-dlpdetailreport
-applicable: Exchange Online
+applicable: Exchange Online, Security & Compliance Center
 title: Get-DlpDetailReport
 schema: 2.0.0
 author: chrisda
@@ -29,7 +29,6 @@ Get-DlpDetailReport [-Action <MultiValuedProperty>]
  [-DlpComplianceRule <MultiValuedProperty>]
  [-EndDate <DateTime>]
  [-EventType <MultiValuedProperty>]
- [-Expression <Expression>]
  [-Page <Int32>]
  [-PageSize <Int32>]
  [-Source <MultiValuedProperty>]
@@ -56,6 +55,8 @@ The Get-DlpDetailReport cmdlet returns detailed information about specific DLP r
 - EventType
 - Action
 - ObjectId
+- Recipients
+- AttachmentNames
 
 To see DLP detection data that's aggregated per day, use the [Get-DlpDetectionsReport](https://docs.microsoft.com/powershell/module/exchange/get-dlpdetectionsreport) cmdlet.
 
@@ -85,7 +86,7 @@ You can specify multiple values separated by commas.
 Type: MultiValuedProperty
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -103,7 +104,7 @@ You can enter multiple values separated by commas. If the values contain spaces 
 Type: MultiValuedProperty
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -121,7 +122,7 @@ You can enter multiple values separated by commas. If the values contain spaces 
 Type: MultiValuedProperty
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -139,7 +140,7 @@ You can enter multiple values separated by commas. If the values contain spaces 
 Type: MultiValuedProperty
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -157,7 +158,7 @@ Use the short date format that's defined in the Regional Options settings on the
 Type: DateTime
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -170,10 +171,14 @@ Accept wildcard characters: False
 The EventType parameter filters the report by the event type. Valid values are:
 
 - DLPActionHits
+- DLPActionUndo
+- DLPMessages
 - DLPPolicyFalsePositive
 - DLPPolicyHits
 - DLPPolicyOverride
 - DLPRuleHits
+
+To view the potential list of valid values for this parameter, run the command: `Get-MailFilterListReport -SelectionTarget EventTypes`. The event type you specify must correspond to the report. For example, you can only specify DLP event types for DLP reports.
 
 You can specify multiple values separated by commas.
 
@@ -181,23 +186,7 @@ You can specify multiple values separated by commas.
 Type: MultiValuedProperty
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Expression
-This parameter is reserved for internal Microsoft use.
-
-```yaml
-Type: Expression
-Parameter Sets: (All)
-Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -213,7 +202,7 @@ The Page parameter specifies the page number of the results you want to view. Va
 Type: Int32
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -229,7 +218,7 @@ The PageSize parameter specifies the maximum number of entries per page. Valid i
 Type: Int32
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -251,7 +240,7 @@ You can specify multiple values separated by commas.
 Type: MultiValuedProperty
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named
@@ -269,7 +258,7 @@ Use the short date format that's defined in the Regional Options settings on the
 Type: DateTime
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Security & Compliance Center
 
 Required: False
 Position: Named

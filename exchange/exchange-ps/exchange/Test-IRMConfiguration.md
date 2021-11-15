@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.Exchange.TransportMailControl-Help.xml
 online version: https://docs.microsoft.com/powershell/module/exchange/test-irmconfiguration
-applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 title: Test-IRMConfiguration
 schema: 2.0.0
 author: chrisda
@@ -42,7 +42,14 @@ You need to be assigned permissions before you can run this cmdlet. Although thi
 Test-IRMConfiguration -Sender adams@contoso.com
 ```
 
-This example tests the IRM configuration for messages sent from the sender adams@contoso.com.
+This example tests the IRM configuration in on-premises Exchange for messages sent from the sender adams@contoso.com.
+
+### Example 2
+```powershell
+Test-IRMConfiguration -Sender chris@fabrikam.com -Recipient michell@fourthcoffee.com
+```
+
+This example tests the IRM configuration in the cloud-based service for messages sent from chris@fabrikam.com to michell@fourthcoffee.com.
 
 ## PARAMETERS
 
@@ -65,13 +72,13 @@ Accept wildcard characters: False
 ```
 
 ### -Sender
-The Sender parameter specifies the SMTP address of the sender to be tested. The cmdlet tests prelicensing and journal report decryption for the sender.
+The Sender parameter specifies the email address of the sender to test.
 
 ```yaml
 Type: SmtpAddress
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: True
 Position: Named
@@ -90,7 +97,7 @@ The Confirm switch specifies whether to show or hide the confirmation prompt. Ho
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -118,15 +125,17 @@ Accept wildcard characters: False
 ```
 
 ### -Recipient
-The Recipient parameter specifies the SMTP address of one or more recipients. The cmdlet tests prelicensing for the specified recipients. You can specify multiple recipient addresses separated by commas.
+The Recipient parameter specifies the email address of the recipient to test. You can specify multiple email addresses separated by commas.
 
-If no recipient is specified, the sender address is used as the recipient.
+This parameter is required in the cloud-based service.
+
+In on-premises Exchange, if you don't use this parameter, the sender address that's specified by the Sender parameter is used for the value of this parameter.
 
 ```yaml
 Type: SmtpAddress[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -144,7 +153,7 @@ The RMSOnline switch specifies whether to test connectivity from Exchange Online
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -160,7 +169,7 @@ The WhatIf switch simulates the actions of the command. You can use this switch 
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named

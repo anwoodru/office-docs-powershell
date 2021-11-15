@@ -14,17 +14,18 @@ ms.reviewer:
 ## SYNOPSIS
 This cmdlet is available only in Security & Compliance Center PowerShell. For more information, see [Security & Compliance Center PowerShell](https://docs.microsoft.com/powershell/exchange/scc-powershell).
 
-Use the New-InformationBarrierPolicy cmdlet to create information barrier policies in the Security & Compliance Center.
+Use the New-InformationBarrierPolicy cmdlet to create information barrier policies in the Microsoft 365 compliance center.
 
 For information about the parameter sets in the Syntax section below, see [Exchange cmdlet syntax](https://docs.microsoft.com/powershell/exchange/exchange-cmdlet-syntax).
 
 ## SYNTAX
 
-### InformationBarrierDefault (Default)
+### OrganizationSegmentAllowedFilter
 ```
-New-InformationBarrierPolicy [-Name] <String> -AssignedSegment <String>
+New-InformationBarrierPolicy [-Name] <String> -AssignedSegment <String> -SegmentAllowedFilter <String>
  [-Comment <String>]
  [-Confirm]
+ [-Force]
  [-State <EopInformationBarrierPolicyState>]
  [-WhatIf]
  [<CommonParameters>]
@@ -35,6 +36,7 @@ New-InformationBarrierPolicy [-Name] <String> -AssignedSegment <String>
 New-InformationBarrierPolicy [-Name] <String> -AssignedSegment <String> -SegmentsAllowed <MultiValuedProperty>
  [-Comment <String>]
  [-Confirm]
+ [-Force]
  [-WhatIf]
  [<CommonParameters>]
 ```
@@ -44,6 +46,7 @@ New-InformationBarrierPolicy [-Name] <String> -AssignedSegment <String> -Segment
 New-InformationBarrierPolicy [-Name] <String> -AssignedSegment <String> -SegmentsBlocked <MultiValuedProperty>
  [-Comment <String>]
  [-Confirm]
+ [-Force]
  [-WhatIf]
  [<CommonParameters>]
 ```
@@ -56,7 +59,7 @@ Information barrier policies are not in effect until you set them to active stat
 
 For more information, see [Information barrier policies](https://docs.microsoft.com/microsoft-365/compliance/information-barriers-policies).
 
-You need to be assigned permissions in the Security & Compliance Center before you can use this cmdlet. For more information, see [Permissions in the Security & Compliance Center](https://docs.microsoft.com/microsoft-365/security/office-365-security/permissions-in-the-security-and-compliance-center).
+To use this cmdlet in Security & Compliance Center PowerShell, you need to be assigned permissions. For more information, see [Permissions in the Microsoft 365 compliance center](https://docs.microsoft.com/microsoft-365/compliance/microsoft-365-compliance-center-permissions).
 
 ## EXAMPLES
 
@@ -69,14 +72,14 @@ This example creates an inactive policy named *Sales-Research* for a segment nam
 
 ### Example 2
 ```powershell
-New-InformationBarrierPolicy -Name "Manufacturing-HR" -AssignedSegment "Manufacturing" -SegmentsAllowed "HR" -State Inactive
+New-InformationBarrierPolicy -Name "Manufacturing-HR" -AssignedSegment "Manufacturing" -SegmentsAllowed "Manufacturing","HR" -State Inactive
 ```
 
 This example creates an inactive policy named *Manufacturing-HR* for a segment named *Manufacturing*. When active and applied, this policy allows people in *Manufacturing* to communicate only with people in the segment named *HR*. (In this example, Manufacturing can't communicate with users who aren't in HR.)
 
 ### Example 3
 ```powershell
-New-InformationBarrierPolicy -Name "Research-HRManufacturing" -AssignedSegment "Research" -SegmentsAllowed "HR","Manufacturing" -State Inactive
+New-InformationBarrierPolicy -Name "Research-HRManufacturing" -AssignedSegment "Research" -SegmentsAllowed "Research","HR","Manufacturing" -State Inactive
 ```
 
 This example creates a policy that allows the *Research* segment to communicate with only *HR* and *Manufacturing*.
@@ -188,15 +191,28 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
-The Confirm switch specifies whether to show or hide the confirmation prompt. How this switch affects the cmdlet depends on if the cmdlet requires confirmation before proceeding.
-
-- Destructive cmdlets (for example, Remove-\* cmdlets) have a built-in pause that forces you to acknowledge the command before proceeding. For these cmdlets, you can skip the confirmation prompt by using this exact syntax: `-Confirm:$false`.
-- Most other cmdlets (for example, New-\* and Set-\* cmdlets) don't have a built-in pause. For these cmdlets, specifying the Confirm switch without a value introduces a pause that forces you acknowledge the command before proceeding.
+The Confirm switch doesn't work on this cmdlet.
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+Applicable: Security & Compliance Center
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+The Force switch specifies whether to suppress warning or confirmation messages. You can use this switch to run tasks programmatically where prompting for administrative input is inappropriate. You don't need to specify a value with this switch.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
 Applicable: Security & Compliance Center
 
 Required: False

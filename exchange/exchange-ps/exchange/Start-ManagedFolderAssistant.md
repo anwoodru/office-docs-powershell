@@ -24,8 +24,8 @@ For information about the parameter sets in the Syntax section below, see [Excha
 ```
 Start-ManagedFolderAssistant [-Identity] <MailboxOrMailUserIdParameter>
  [-AggMailboxCleanup]
- [-DomainController <Fqdn>]
  [-Confirm]
+ [-DomainController <Fqdn>]
  [-HoldCleanup]
  [-WhatIf]
  [<CommonParameters>]
@@ -44,8 +44,41 @@ Start-ManagedFolderAssistant [-Identity] <MailboxOrMailUserIdParameter> -HoldCle
 
 ### StopHoldCleanup
 ```
+Start-ManagedFolderAssistant [-Identity] <MailboxOrMailUserIdParameter> [-StopHoldCleanup]
+ [-AggMailboxCleanup]
+ [-Confirm]
+ [-FullCrawl]
+ [-InactiveMailbox]
+ [-WhatIf]
+ [<CommonParameters>]
+```
+
+### ComplianceBoundaryAssistant
+```
 Start-ManagedFolderAssistant [-Identity] <MailboxOrMailUserIdParameter>
- [-StopHoldCleanup]
+ [-AdaptiveScope]
+ [-AggMailboxCleanup]
+ [-Confirm]
+ [-FullCrawl]
+ [-InactiveMailbox]
+ [-WhatIf]
+ [<CommonParameters>]
+```
+
+### ComplianceJobAssistant
+```
+Start-ManagedFolderAssistant [-Identity] <MailboxOrMailUserIdParameter> [-ComplianceJob]
+ [-AggMailboxCleanup]
+ [-Confirm]
+ [-FullCrawl]
+ [-InactiveMailbox]
+ [-WhatIf]
+ [<CommonParameters>]
+```
+
+### DataGovernanceAssistant
+```
+Start-ManagedFolderAssistant [-Identity] <MailboxOrMailUserIdParameter> [-DataGovernance]
  [-AggMailboxCleanup]
  [-Confirm]
  [-FullCrawl]
@@ -97,6 +130,8 @@ The Identity parameter specifies the mailbox to be processed. In cross-premises 
 - SamAccountName
 - User ID or user principal name (UPN)
 
+**Note**: In the cloud-based service, if you receive an error, try using the mailbox GUID for the value of this parameter. You can get the mailbox GUID value by replacing \<UserIdentity\> with the email address of the user and running the following command: `Get-Mailbox -User <UserIdentity> | Format-List *GUID,MailboxLocations`.
+
 ```yaml
 Type: MailboxOrMailUserIdParameter
 Parameter Sets: (All)
@@ -141,6 +176,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -AdaptiveScope
+This parameter is available only in the cloud-based service.
+
+{{ Fill AdaptiveScope Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: ComplianceBoundaryAssistant
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -AggMailboxCleanup
 This parameter is reserved for internal Microsoft use.
 
@@ -149,6 +202,24 @@ Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 Applicable: Exchange Server 2016, Exchange Server 2019, Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ComplianceJob
+This parameter is available only in the cloud-based service.
+
+This parameter is reserved for internal Microsoft use.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: ComplianceJobAssistant
+Aliases:
+Applicable: Exchange Online
 
 Required: False
 Position: Named
@@ -168,6 +239,24 @@ Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
 Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DataGovernance
+This parameter is available only in the cloud-based service.
+
+This parameter is reserved for internal Microsoft use.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: DataGovernanceAssistant
+Aliases:
+Applicable: Exchange Online
 
 Required: False
 Position: Named
@@ -201,7 +290,7 @@ The FullCrawl switch recalculates the application of tags across the whole mailb
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: HoldCleanup, StopHoldCleanup
+Parameter Sets: ComplianceBoundaryAssistant, ComplianceJobAssistant, DataGovernanceAssistant, HoldCleanup, StopHoldCleanup
 Aliases:
 Applicable: Exchange Online
 
@@ -223,7 +312,7 @@ When you use this switch, items aren't moved from the inactive mailbox to the ar
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: HoldCleanup, StopHoldCleanup
+Parameter Sets: ComplianceBoundaryAssistant, ComplianceJobAssistant, DataGovernanceAssistant, HoldCleanup, StopHoldCleanup
 Aliases:
 Applicable: Exchange Online
 

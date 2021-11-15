@@ -38,6 +38,7 @@ Get-MailboxImportRequestStatistics [-Identity] <MailboxImportRequestIdParameter>
 Get-MailboxImportRequestStatistics [-Identity] <MailboxImportRequestIdParameter>
  [-DiagnosticInfo <String>]
  [-IncludeReport]
+ [-IncludeSkippedItems]
  [-ReportOnly]
  [<CommonParameters>]
 ```
@@ -123,7 +124,7 @@ Accept wildcard characters: False
 ```
 
 ### -MRSInstance
-This parameter is available or functional only in Exchange Server 2010.
+This parameter is available only in Exchange Server 2010.
 
 The MRSInstance parameter specifies the fully qualified domain name (FQDN) of the Client Access server on which the Microsoft Exchange Mailbox Replication service (MRS) resides. When using this parameter, all records are returned for this instance of MRS.
 
@@ -248,6 +249,24 @@ Type: SwitchParameter
 Parameter Sets: IdentityOnPremises, IdentityCloud, MigrationRequestQueue
 Aliases:
 Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IncludeSkippedItems
+This parameter is available only in the cloud-based service.
+
+{{ Fill IncludeSkippedItems Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: IdentityCloud
+Aliases:
+Applicable: Exchange Online
 
 Required: False
 Position: Named

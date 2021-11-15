@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.Exchange.TransportMailflow-Help.xml
 online version: https://docs.microsoft.com/powershell/module/exchange/get-tenantallowblocklistitems
-applicable: Exchange Online, Exchange Online Protection
+applicable: Exchange Online, Security & Compliance Center, Exchange Online Protection
 title: Get-TenantAllowBlockListItems
 schema: 2.0.0
 author: chrisda
@@ -17,7 +17,7 @@ ROBOTS: NOINDEX
 
 This cmdlet is available only in the cloud-based service.
 
-Use the Get-TenantAllowBlockListItems cmdlet to view entries in the Tenant Allow/Block List in the Security & Compliance Center.
+Use the Get-TenantAllowBlockListItems cmdlet to view entries in the Tenant Allow/Block List in the Microsoft 365 Defender portal.
 
 **Note**: We recommend that you use the Exchange Online PowerShell V2 module to connect to Exchange Online PowerShell. For instructions, see [Connect to Exchange Online PowerShell](https://docs.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell).
 
@@ -25,22 +25,24 @@ For information about the parameter sets in the Syntax section below, see [Excha
 
 ## SYNTAX
 
-### NoExpiration
+### Expiration (Default)
 ```
-Get-TenantAllowBlockListItems -ListType <ListType>
- [-Action <TenantAllowBlockList.ItemAction>]
+Get-TenantAllowBlockListItems -ListType <ListType> [-ExpirationDate <DateTime>]
+ [-Allow]
+ [-Block]
  [-Entry <String>]
- [-NoExpiration]
+ [-ListSubType <ListSubType[]>]
  [-OutputJson]
  [<CommonParameters>]
 ```
 
-### Expiration
+### NoExpiration
 ```
-Get-TenantAllowBlockListItems -ListType <ListType>
- [-Action <TenantAllowBlockList.ItemAction>]
+Get-TenantAllowBlockListItems -ListType <ListType> [-NoExpiration]
+ [-Allow]
+ [-Block]
  [-Entry <String>]
- [-ExpirationDate <DateTime>]
+ [-ListSubType <ListSubType[]>]
  [-OutputJson]
  [<CommonParameters>]
 ```
@@ -52,7 +54,7 @@ You need to be assigned permissions before you can run this cmdlet. Although thi
 
 ### Example 1
 ```powershell
-Get-TenantAllowBlockListItems -ListType Url -Action Block
+Get-TenantAllowBlockListItems -ListType Url -Block
 ```
 
 This example returns all blocked URLs.
@@ -63,6 +65,13 @@ Get-TenantAllowBlockListItems -ListType FileHash -Entry "9f86d081884c7d659a2feaa
 ```
 
 This example returns information for the specified file hash value.
+
+### Example 3
+```powershell
+Get-TenantAllowBlockListItems -ListType Url -ListSubType AdvancedDelivery
+```
+
+This example returns information for all allowed third-party phishing simulation URLs. For more information, see [Configure the delivery of third-party phishing simulations to users and unfiltered messages to SecOps mailboxes](https://docs.microsoft.com/microsoft-365/security/office-365-security/configure-advanced-delivery).
 
 ## PARAMETERS
 
@@ -76,7 +85,7 @@ The ListType parameter specifies the list to view. Valid values are:
 Type: ListType
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online, Exchange Online Protection
+Applicable: Exchange Online, Security & Compliance Center, Exchange Online Protection
 
 Required: True
 Position: Named
@@ -85,57 +94,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Action
-The Action parameter filters the results by action type. Valid values are:
-
-- Allow
-- Block
-
-```yaml
-Type: TenantAllowBlockList.ItemAction
-Parameter Sets: (All)
-Aliases:
-Applicable: Exchange Online, Exchange Online Protection
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Entry
-The Entry parameter filters the results by the specified URL or file hash value:
+The Entry parameter filters the results based on the ListType parameter value. Valid values are:
 
-- The exact URL entry value.
-- The exact SHA256 file hash value.
+- Url: The exact URL entry value.
+- File: The exact SHA256 file hash value.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online, Exchange Online Protection
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ExpirationDate
-The ExpirationDate parameter filters the results by expiration date in Coordinated Universal Time (UTC).
-
-To specify a date/time value for this parameter, use either of the following options:
-
-- Specify the date/time value in UTC: For example, `"2016-05-06 14:30:00z"`.
-- Specify the date/time value as a formula that converts the date/time in your local time zone to UTC: For example, `(Get-Date "5/6/2020 9:30 AM").ToUniversalTime()`. For more information, see [Get-Date](https://docs.microsoft.com/powershell/module/Microsoft.PowerShell.Utility/Get-Date).
-
-```yaml
-Type: DateTime
-Parameter Sets: Expiration
-Aliases:
-Applicable: Exchange Online, Exchange Online Protection
+Applicable: Exchange Online, Security & Compliance Center, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -151,9 +120,81 @@ The NoExpiration switch filters the results by entries that are set to never exp
 Type: SwitchParameter
 Parameter Sets: NoExpiration
 Aliases:
-Applicable: Exchange Online, Exchange Online Protection
+Applicable: Exchange Online, Security & Compliance Center, Exchange Online Protection
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Allow
+The Allow switch filters the results for allow entries. You don't need to specify a value with this switch.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Block
+The Block switch filters the results for block entries. You don't need to specify a value with this switch.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Security & Compliance Center, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ExpirationDate
+The ExpirationDate parameter filters the results by expiration date in Coordinated Universal Time (UTC).
+
+To specify a date/time value for this parameter, use either of the following options:
+
+- Specify the date/time value in UTC: For example, `"2021-05-06 14:30:00z"`.
+- Specify the date/time value as a formula that converts the date/time in your local time zone to UTC: For example, `(Get-Date "5/6/2020 9:30 AM").ToUniversalTime()`. For more information, see [Get-Date](https://docs.microsoft.com/powershell/module/Microsoft.PowerShell.Utility/Get-Date).
+
+```yaml
+Type: DateTime
+Parameter Sets: Expiration
+Aliases:
+Applicable: Exchange Online, Security & Compliance Center, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ListSubType
+The ListSubType parameter filters the results by subtype. Valid values are:
+
+- AdvancedDelivery
+- Tenant: This is the default value.
+
+```yaml
+Type: ListSubType[]
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -169,7 +210,7 @@ You use this switch to prevent the command from halting on the first entry that 
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online, Exchange Online Protection
+Applicable: Exchange Online, Security & Compliance Center, Exchange Online Protection
 
 Required: False
 Position: Named

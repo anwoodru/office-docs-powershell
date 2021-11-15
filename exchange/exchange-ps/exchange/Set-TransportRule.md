@@ -102,7 +102,6 @@ Set-TransportRule [-Identity] <RuleIdParameter>
  [-ExceptIfHeaderMatchesPatterns <Pattern []>]
  [-ExceptIfManagerAddresses <RecipientIdParameter []>]
  [-ExceptIfManagerForEvaluatedUser <EvaluatedUser>]
- [-ExceptIfMessageContainsAllDataClassifications <Hashtable []>]
  [-ExceptIfMessageContainsDataClassifications <Hashtable []>]
  [-ExceptIfMessageSizeOver <ByteQuantifiedSize>]
  [-ExceptIfMessageTypeMatches <MessageType>]
@@ -147,7 +146,6 @@ Set-TransportRule [-Identity] <RuleIdParameter>
  [-LogEventText <EventLogText>]
  [-ManagerAddresses <RecipientIdParameter []>]
  [-ManagerForEvaluatedUser <EvaluatedUser>]
- [-MessageContainsAllDataClassifications <Hashtable []>]
  [-MessageContainsDataClassifications <Hashtable []>]
  [-MessageSizeOver <ByteQuantifiedSize>]
  [-MessageTypeMatches <MessageType>]
@@ -163,6 +161,7 @@ Set-TransportRule [-Identity] <RuleIdParameter>
  [-RecipientADAttributeMatchesPatterns <Pattern []>]
  [-RecipientAddressContainsWords <Word []>]
  [-RecipientAddressMatchesPatterns <Pattern []>]
+ [-RecipientAddressType <RecipientAddressType>]
  [-RecipientDomainIs <Word []>]
  [-RecipientInSenderList <Word []>]
  [-RedirectMessageTo <RecipientIdParameter []>]
@@ -171,6 +170,7 @@ Set-TransportRule [-Identity] <RuleIdParameter>
  [-RemoveHeader <HeaderName>]
  [-RemoveOME <Boolean>]
  [-RemoveOMEv2 <Boolean>]
+ [-RemoveRMSAttachmentEncryption <Boolean>]
  [-RouteMessageOutboundConnector <OutboundConnectorIdParameter>]
  [-RouteMessageOutboundRequireTls <Boolean>]
  [-RuleErrorAction <RuleErrorAction>]
@@ -458,6 +458,8 @@ Accept wildcard characters: False
 ```
 
 ### -AnyOfRecipientAddressContainsWords
+**Note**: In the cloud-based service, this parameter behaves the same as the RecipientAddressContainsWords parameter (other recipients in the message are not affected).
+
 This parameter specifies a condition or part of a condition for the rule. The name of the corresponding exception parameter starts with ExceptIf.
 
 In on-premises Exchange, this condition is available on Mailbox servers and Edge Transport servers.
@@ -482,6 +484,8 @@ Accept wildcard characters: False
 ```
 
 ### -AnyOfRecipientAddressMatchesPatterns
+**Note**: In the cloud-based service, this parameter behaves the same as the RecipientAddressMatchesPatterns parameter (other recipients in the message are not affected).
+
 This parameter specifies a condition or part of a condition for the rule. The name of the corresponding exception parameter starts with ExceptIf.
 
 In on-premises Exchange, this condition is available on Mailbox servers and Edge Transport servers.
@@ -693,7 +697,7 @@ In on-premises Exchange, this action is only available on Mailbox servers.
 The ApplyHtmlDisclaimerLocation parameter specifies where to insert the HTML disclaimer text in the body of messages. Valid values are:
 
 - Append: The disclaimer is added to the end of the message body. This is the default value.
-- Prepend: The disclaimer is inserted to the beginning of the message body.
+- Prepend: The disclaimer is inserted at the beginning of the message body.
 
 If you don't use this parameter with the ApplyHtmlDisclaimerText parameter, the default value Append is used.
 
@@ -1013,7 +1017,7 @@ When you specify multiple properties, or multiple values for the same property, 
 Type: Word[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
+Applicable: Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -1251,9 +1255,9 @@ Accept wildcard characters: False
 ```
 
 ### -Disconnect
-This parameter specifies an action or part of an action for the rule.
+This parameter is available or functional only on Edge Transport servers in on-premises Exchange.
 
-This action is available only on Edge Transport servers in on-premises Exchange.
+This parameter specifies an action or part of an action for the rule.
 
 The Disconnect parameter specifies an action that ends the SMTP connection between the sending server and the Edge Transport server without generating an NDR.
 
@@ -1264,7 +1268,7 @@ The Disconnect parameter specifies an action that ends the SMTP connection betwe
 Type: Boolean
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -1280,7 +1284,7 @@ The DlpPolicy parameter specifies the data loss prevention (DLP) policy that's a
 Type: String
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
+Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
 
 Required: False
 Position: Named
@@ -1451,6 +1455,8 @@ Accept wildcard characters: False
 ```
 
 ### -ExceptIfAnyOfRecipientAddressContainsWords
+**Note**: In the cloud-based service, this parameter behaves the same as the ExceptIfRecipientAddressContainsWords parameter (other recipients in the message are not affected).
+
 This parameter specifies an exception or part of an exception for the rule. The name of the corresponding condition doesn't include the ExceptIf prefix.
 
 In on-premises Exchange, this exception is available on Mailbox servers and Edge Transport servers.
@@ -1475,6 +1481,8 @@ Accept wildcard characters: False
 ```
 
 ### -ExceptIfAnyOfRecipientAddressMatchesPatterns
+**Note**: In the cloud-based service, this parameter behaves the same as the ExceptIfRecipientAddressMatchesPatterns parameter (other recipients in the message are not affected).
+
 This parameter specifies an exception or part of an exception for the rule. The name of the corresponding condition doesn't include the ExceptIf prefix.
 
 In on-premises Exchange, this exception is available on Mailbox servers and Edge Transport servers.
@@ -1842,7 +1850,7 @@ When you specify multiple properties, or multiple values for the same property, 
 Type: Word[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
+Applicable: Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -2304,24 +2312,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ExceptIfMessageContainsAllDataClassifications
-This parameter is available only in the cloud-based service.
-
-This parameter is reserved for internal Microsoft use.
-
-```yaml
-Type: Hashtable[]
-Parameter Sets: (All)
-Aliases:
-Applicable: Exchange Online, Exchange Online Protection
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -ExceptIfMessageContainsDataClassifications
 This parameter specifies an exception or part of an exception for the rule. The name of the corresponding condition doesn't include the ExceptIf prefix.
 
@@ -2337,7 +2327,7 @@ For a list of sensitive information types available, see [Sensitive information 
 Type: Hashtable[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
+Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
 
 Required: False
 Position: Named
@@ -2384,13 +2374,13 @@ In on-premises Exchange, this exception is only available on Mailbox servers.
 The ExceptIfMessageTypeMatches parameter specifies an exception that looks for messages of the specified type. Valid values are:
 
 - OOF: Auto-reply messages configured by the user.
-- AutoForward: Messages automatically forwarded to an alternative recipient (by Exchange, not by auto-forwarding rules that users configure in Outlook or Outlook).
+- AutoForward: Messages automatically forwarded to an alternative recipient (by Exchange, not by auto-forwarding rules that users configure in Outlook on the web or Outlook).
 - Encrypted: Encrypted messages.
 - Calendaring: Meeting requests and responses.
 - PermissionControlled: Messages that have specific permissions configured.
 - Voicemail: Voice mail messages forwarded by Unified Messaging service.
 - Signed: Digitally signed messages.
-- ApprovalRequest: Moderations request messages sent to moderators.
+- ApprovalRequest: Moderation request messages sent to moderators.
 - ReadReceipt: Read receipts.
 
 ```yaml
@@ -2589,7 +2579,7 @@ This parameter is reserved for internal Microsoft use.
 Type: Word[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -2616,7 +2606,7 @@ The rule looks for messages with an SCL value that's greater than or equal to th
 Type: SclValue
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -2768,7 +2758,7 @@ This parameter is reserved for internal Microsoft use.
 Type: Word[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -2788,7 +2778,7 @@ The ExceptIfSenderIpRanges parameter specifies an exception that looks for sende
 - IP address range: For example, 192.168.0.1-192.168.0.254.
 - Classless InterDomain Routing (CIDR) IP address range: For example, 192.168.0.1/25.
 
-You can specify multiple IP addresses or ranges separated by commas.
+You can specify multiple values separated by commas.
 
 ```yaml
 Type: MultiValuedProperty
@@ -3213,7 +3203,7 @@ This parameter supports plain text, HTML tags and the following keywords that us
 Type: DisclaimerText
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
+Applicable: Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -3420,7 +3410,7 @@ Accept wildcard characters: False
 ```
 
 ### -IncidentReportOriginalMail
-This parameter is available or functional only in Exchange Server 2013.
+This parameter is available only in Exchange Server 2013.
 
 This parameter has been deprecated and is no longer used. Use the IncidentReportContent parameter instead. The value AttachOriginalMail on the IncidentReportContent parameter is equivalent to setting this parameter to the value IncludeOriginalMail.
 
@@ -3447,9 +3437,9 @@ Accept wildcard characters: False
 ```
 
 ### -LogEventText
-This parameter specifies an action or part of an action for the rule.
+This parameter is available or functional only on Edge Transport servers in on-premises Exchange.
 
-This action is available only on Edge Transport servers in on-premises Exchange.
+This parameter specifies an action or part of an action for the rule.
 
 The LogEventText parameter specifies an action that creates an entry in the Application log on the local Edge Transport server. The value for this parameter specifies the text that you want to include in the event log entry. If the text contains spaces, enclose the value in quotation marks (").
 
@@ -3465,7 +3455,7 @@ The entry contains the following information:
 Type: EventLogText
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -3530,24 +3520,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -MessageContainsAllDataClassifications
-This parameter is available only in the cloud-based service.
-
-This parameter is reserved for internal Microsoft use.
-
-```yaml
-Type: Hashtable[]
-Parameter Sets: (All)
-Aliases:
-Applicable: Exchange Online, Exchange Online Protection
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -MessageContainsDataClassifications
 This parameter specifies a condition or part of a condition for the rule. The name of the corresponding exception parameter starts with ExceptIf.
 
@@ -3565,7 +3537,7 @@ You can specify the notification options by using the NotifySender parameter.
 Type: Hashtable[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
+Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
 
 Required: False
 Position: Named
@@ -3612,13 +3584,13 @@ In on-premises Exchange, this condition is only available on Mailbox servers.
 The MessageTypeMatches parameter specifies a condition that looks for messages of the specified type. Valid values are:
 
 - OOF: Auto-reply messages configured by the user.
-- AutoForward: Messages automatically forwarded to an alternative recipient (by Exchange, not by auto-forwarding rules that users configure in Outlook or Outlook).
+- AutoForward: Messages automatically forwarded to an alternative recipient (by Exchange, not by auto-forwarding rules that users configure in Outlook on the web or Outlook).
 - Encrypted: Encrypted messages.
 - Calendaring: Meeting requests and responses.
 - PermissionControlled: Messages that have specific permissions configured.
 - Voicemail: Voice mail messages forwarded by Unified Messaging service.
 - Signed: Digitally signed messages.
-- ApprovalRequest: Moderations request messages sent to moderators.
+- ApprovalRequest: Moderation request messages sent to moderators.
 - ReadReceipt: Read receipts.
 
 ```yaml
@@ -3743,11 +3715,13 @@ For all values except NotifyOnly, you can specify an enhanced status code and a 
 
 If you use this parameter, you also need to specify a condition that looks for sensitive information types in messages by using the MessageContainsDataClassifications parameter.
 
+This action is applicable to messages sent by internal users only. External senders will not receive notifications.
+
 ```yaml
 Type: NotifySenderType
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
+Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
 
 Required: False
 Position: Named
@@ -3977,6 +3951,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RecipientAddressType
+This parameter is available only in the cloud-based service.
+
+The RecipientAddressType parameter specifies how conditions and exceptions check recipient email addresses. Valid values are:
+
+- Original: The rule checks only the recipient's primary SMTP email address.
+- Resolved: The rule checks the recipient's primary SMTP email address and all proxy addresses. This is the default value
+
+```yaml
+Type: RecipientAddressType
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -RecipientDomainIs
 This parameter specifies a condition or part of a condition for the rule. The name of the corresponding exception parameter starts with ExceptIf.
 
@@ -4008,7 +4003,7 @@ This parameter is reserved for internal Microsoft use.
 Type: Word[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -4164,6 +4159,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RemoveRMSAttachmentEncryption
+This parameter is available only in the cloud-based service.
+
+This parameter specifies an action or part of an action for the rule.
+
+{{ Fill RemoveRMSAttachmentEncryption Description }}
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online, Exchange Online Protection
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -RouteMessageOutboundConnector
 This parameter is available only in the cloud-based service.
 
@@ -4267,7 +4282,7 @@ The rule looks for messages with an SCL value that's greater than or equal to th
 Type: SclValue
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -4447,7 +4462,7 @@ This parameter is reserved for internal Microsoft use.
 Type: Word[]
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online
+Applicable: Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -4467,7 +4482,7 @@ The SenderIpRanges parameter specifies a condition that looks for senders whose 
 - IP address range: For example, 192.168.0.1-192.168.0.254.
 - Classless InterDomain Routing (CIDR) IP address range: For example, 192.168.0.1/25.
 
-You can specify multiple IP addresses or ranges separated by commas.
+You can specify multiple values separated by commas.
 
 ```yaml
 Type: MultiValuedProperty
@@ -4679,9 +4694,9 @@ Accept wildcard characters: False
 ```
 
 ### -SmtpRejectMessageRejectStatusCode
-This parameter specifies an action or part of an action for the rule.
+This parameter is available or functional only on Edge Transport servers in on-premises Exchange.
 
-This action is available only on Edge Transport servers in on-premises Exchange.
+This parameter specifies an action or part of an action for the rule.
 
 The SmtpRejectMessageRejectStatusCode parameter specifies an action that disconnects the sending server from the Edge Transport server. The value of this parameter is the SMTP code that's used. Valid values are the integers 400 through 500.
 
@@ -4691,7 +4706,7 @@ You can use this parameter with the SmtpRejectMessageRejectText parameter. If yo
 Type: RejectStatusCode
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named
@@ -4701,9 +4716,9 @@ Accept wildcard characters: False
 ```
 
 ### -SmtpRejectMessageRejectText
-This parameter specifies an action or part of an action for the rule.
+This parameter is available or functional only on Edge Transport servers in on-premises Exchange.
 
-This action is available only on Edge Transport servers in on-premises Exchange.
+This parameter specifies an action or part of an action for the rule.
 
 The SmtpRejectMessageRejectText parameter specifies an action that disconnects the sending server from the Edge Transport server. The value of this parameter is the explanation text that's used. If the value contains spaces, enclose the value in quotation marks (").
 
@@ -4713,7 +4728,7 @@ You can use this parameter with the SmtpRejectMessageRejectStatusCode parameter.
 Type: RejectText
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online, Exchange Online Protection
 
 Required: False
 Position: Named

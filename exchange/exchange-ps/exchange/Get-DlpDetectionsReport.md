@@ -28,8 +28,8 @@ Get-DlpDetectionsReport [-Action <MultiValuedProperty>]
  [-DlpCompliancePolicy <MultiValuedProperty>]
  [-DlpComplianceRule <MultiValuedProperty>]
  [-EndDate <DateTime>]
- [-EventType <MultiValuedProperty>]
  [-Expression <Expression>]
+ [-EventType <MultiValuedProperty>]
  [-Page <Int32>]
  [-PageSize <Int32>]
  [-Source <MultiValuedProperty>]
@@ -160,11 +160,22 @@ Accept wildcard characters: False
 ### -EventType
 The EventType parameter filters the report by the event type. Valid values are:
 
+- DataRetentions
 - DLPActionHits
+- DLPActionUndo
+- DLPByIncidentIdActionHits
+- DLPByIncidentIdMessages
+- DLPByIncidentIdPolicyFalsePositive
+- DLPByIncidentIdPolicyHits
+- DLPByIncidentIdPolicyOverride
+- DLPByIncidentIdRuleHits
+- DLPMessages
 - DLPPolicyFalsePositive
 - DLPPolicyHits
 - DLPPolicyOverride
 - DLPRuleHits
+
+To view the potential list of valid values for this parameter, run the command: `Get-MailFilterListReport -SelectionTarget EventTypes`. The event type you specify must correspond to the report. For example, you can only specify DLP event types for DLP reports.
 
 You can specify multiple values separated by commas.
 
@@ -182,13 +193,15 @@ Accept wildcard characters: False
 ```
 
 ### -Expression
+This parameter is available only in Security & Compliance Center PowerShell
+
 This parameter is reserved for internal Microsoft use.
 
 ```yaml
 Type: Expression
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Online, Security & Compliance Center
+Applicable: Security & Compliance Center
 
 Required: False
 Position: Named
@@ -272,7 +285,7 @@ Accept wildcard characters: False
 ### -SummarizeBy
 The SummarizeBy parameter returns totals based on the values you specify. If your report filters data using any of the values accepted by this parameter, you can use the SummarizeBy parameter to summarize the results based on those values. To decrease the number of rows returned in the report, consider using the SummarizeBy parameter. Summarizing reduces the amount of data that's retrieved for the report and delivers the report faster. For example, instead of seeing each instance of a specific value of EventType on an individual row in the report, you can use the SummarizeBy parameter to see the total number of instances of that value of EventType on one row in the report.
 
-Valid values are:
+For this cmdlet, valid values are:
 
 - DLPPolicy
 - Domain

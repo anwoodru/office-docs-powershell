@@ -45,6 +45,7 @@ New-UnifiedGroup [-DisplayName <String>]
  [-Owner <RecipientIdParameter>]
  [-PrimarySmtpAddress <SmtpAddress>]
  [-RequireSenderAuthenticationEnabled <Boolean>]
+ [-SensitivityLabelId <Sustem.Guid>]
  [-SuppressWarmupMessage]
  [-WhatIf]
  [<CommonParameters>]
@@ -72,6 +73,7 @@ New-UnifiedGroup [-DisplayName <String>]
  [-Owner <RecipientIdParameter>]
  [-PrimarySmtpAddress <SmtpAddress>]
  [-RequireSenderAuthenticationEnabled <Boolean>]
+ [-SensitivityLabelId <Sustem.Guid>]
  [-SuppressWarmupMessage]
  [-WhatIf]
  [<CommonParameters>]
@@ -100,6 +102,7 @@ New-UnifiedGroup [-DisplayName <String>]
  [-Owner <RecipientIdParameter>]
  [-PrimarySmtpAddress <SmtpAddress>]
  [-RequireSenderAuthenticationEnabled <Boolean>]
+ [-SensitivityLabelId <Sustem.Guid>]
  [-SuppressWarmupMessage]
  [-WhatIf]
  [<CommonParameters>]
@@ -208,7 +211,7 @@ Accept wildcard characters: False
 ### -Alias
 The Alias parameter specifies the Exchange alias (also known as the mail nickname) for the Microsoft 365 Group. This value identifies the recipient as a mail-enabled object, and shouldn't be confused with multiple email addresses for the same recipient (also known as proxy addresses). A recipient can have only one Alias value.
 
-The value of Alias can contain letters, numbers and the characters: ``! # $ % & ' * + - / = ? ^ _ ` { | } ~``. Periods (.) are allowed, but each period must be surrounded by other valid characters (for example, help.desk). Unicode characters from U+00A1 to U+00FF are also allowed. The maximum length of the Alias value is 64 characters.
+The value of Alias can contain letters, numbers and the following characters: !, #, $, %, &, ', \*, +, -, /, =, ?, ^, \_, \`, {, }, |, and ~. Periods (.) are allowed, but each period must be surrounded by other valid characters (for example, help.desk). Unicode characters from U+00A1 to U+00FF are also allowed. The maximum length of the Alias value is 64 characters.
 
 If you don't use the Alias parameter when you create a Microsoft 365 Group, the value of the DisplayName parameter is used for the Alias value. Spaces are removed, unsupported characters are converted to question marks (?), and numbers may be added to maintain the uniqueness of the Alias value.
 
@@ -609,6 +612,24 @@ The RequireSenderAuthenticationEnabled parameter specifies whether to accept mes
 ```yaml
 Type: Boolean
 Parameter Sets: Identity, ProvisioningOptions, SegmentationOption
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SensitivityLabelId
+This parameter is available only in the cloud-based service.
+
+{{ Fill SensitivityLabelId Description }}
+
+```yaml
+Type: System.Guid
+Parameter Sets: Identity, SegmentationOption, ProvisioningOptions
 Aliases:
 Applicable: Exchange Online
 

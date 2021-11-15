@@ -24,8 +24,7 @@ For information about the parameter sets in the Syntax section below, see [Excha
 
 ### Arbitration
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [-Arbitration]
+Enable-Mailbox [-Identity] <UserIdParameter> [-Arbitration]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>]
  [-Confirm]
@@ -63,8 +62,7 @@ Enable-Mailbox [-Identity] <UserIdParameter> -ArchiveDomain <SmtpDomain>
 
 ### Discovery
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [-Discovery]
+Enable-Mailbox [-Identity] <UserIdParameter> [-Discovery]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>]
  [-Confirm]
@@ -83,8 +81,7 @@ Enable-Mailbox [-Identity] <UserIdParameter>
 
 ### Equipment
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [-Equipment]
+Enable-Mailbox [-Identity] <UserIdParameter> [-Equipment]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>]
  [-Confirm]
@@ -148,8 +145,7 @@ Enable-Mailbox [-Identity] <UserIdParameter> -LinkedDomainController <String>  -
 
 ### PublicFolder
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [-PublicFolder]
+Enable-Mailbox [-Identity] <UserIdParameter> [-PublicFolder]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>]
  [-Confirm]
@@ -169,8 +165,7 @@ Enable-Mailbox [-Identity] <UserIdParameter>
 
 ### Room
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [-Room]
+Enable-Mailbox [-Identity] <UserIdParameter> [-Room]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>]
  [-Confirm]
@@ -189,8 +184,7 @@ Enable-Mailbox [-Identity] <UserIdParameter>
 
 ### Shared
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [-Shared]
+Enable-Mailbox [-Identity] <UserIdParameter> [-Shared]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>]
  [-Confirm]
@@ -229,9 +223,9 @@ Enable-Mailbox [-Identity] <UserIdParameter>
 
 ### Archive
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>]
- [-Archive]
- [-ArchiveDatabase <DatabaseIdParameter>  [-ArchiveGuid <Guid>]
+Enable-Mailbox [-Identity] <UserIdParameter>] [-Archive]
+ [-ArchiveDatabase <DatabaseIdParameter>]
+ [-ArchiveGuid <Guid>]
  [-ArchiveName <MultiValuedProperty>]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>
@@ -248,8 +242,7 @@ Enable-Mailbox [-Identity] <UserIdParameter>]
 
 ### AuditLog
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [AuditLog]
+Enable-Mailbox [-Identity] <UserIdParameter> [-AuditLog]
  [-ActiveSyncMailboxPolicy <MailboxPolicyIdParameter>]
  [-Alias <String>]
  [-Confirm]
@@ -266,8 +259,7 @@ Enable-Mailbox [-Identity] <UserIdParameter>
 
 ### AutoExpandingArchive
 ```
-Enable-Mailbox [-Identity] <UserIdParameter>
- [-AutoExpandingArchive]
+Enable-Mailbox [-Identity] <UserIdParameter> [-AutoExpandingArchive]
  [-Confirm]
  [-Force]
  [-RoleAssignmentPolicy <MailboxPolicyIdParameter>]
@@ -586,7 +578,7 @@ This parameter is available only in on-premises Exchange.
 
 The Alias parameter specifies the Exchange alias (also known as the mail nickname) for the recipient. This value identifies the recipient as a mail-enabled object, and shouldn't be confused with multiple email addresses for the same recipient (also known as proxy addresses). A recipient can have only one Alias value.
 
-The value of Alias can contain letters, numbers and the characters: ``! # $ % & ' * + - / = ? ^ _ ` { | } ~``. Periods (.) are allowed, but each period must be surrounded by other valid characters (for example, help.desk). Unicode characters from U+00A1 to U+00FF are also allowed. The maximum length of the Alias value is 64 characters.
+The value of Alias can contain letters, numbers and the following characters: !, #, $, %, &, ', \*, +, -, /, =, ?, ^, \_, \`, {, }, |, and ~. Periods (.) are allowed, but each period must be surrounded by other valid characters (for example, help.desk). Unicode characters from U+00A1 to U+00FF are also allowed. The maximum length of the Alias value is 64 characters.
 
 When you create a recipient without specifying an email address, the Alias value you specify is used to generate the primary email address (`alias@domain`). Supported Unicode characters are mapped to best-fit US-ASCII text characters. For example, U+00F6 (ö) is changed to oe in the primary email address.
 
@@ -669,9 +661,17 @@ Accept wildcard characters: False
 ```
 
 ### -ArchiveName
-The ArchiveName parameter specifies the name of the archive mailbox. This is the name displayed to users in Outlook and Outlook Web App.
+The ArchiveName parameter specifies the name of the archive mailbox. This is the name displayed to users in Outlook on the web (formerly known as Outlook Web App). If the value contains spaces, enclose the value in quotation marks (").
 
-If you don't use this parameter, the default value is `In-Place Archive - <Mailbox User's Display Name>`.
+In on-premises Exchange, if you don't use this parameter, the following default values are used based on the version of Exchange:
+
+- Exchange 2016 or later: `In-Place Archive -<Display Name>`
+- Exchange 2013: `In-Place Archive - <Display Name>`
+- Exchange 2010: `Personal Archive - <Display Name>`
+
+In Exchange Online, if you don't use this parameter, the default value is `In-Place Archive -<Display Name>`.
+
+In Outlook in Exchange Online, the value of this parameter is ignored. The name of the archive mailbox that's shown in the folder list is `Online Archive - <PrimarySMTPAddress>`.
 
 ```yaml
 Type: MultiValuedProperty
@@ -867,7 +867,7 @@ Accept wildcard characters: False
 ```
 
 ### -ManagedFolderMailboxPolicy
-This parameter is available or functional only in Exchange Server 2010.
+This parameter is available only in Exchange Server 2010.
 
 The ManagedFolderMailboxPolicy parameter specifies the managed folder mailbox policy to enable for the mailbox that you create. If you don't specify this parameter, the default managed folder mailbox policy is used.
 
@@ -885,7 +885,7 @@ Accept wildcard characters: False
 ```
 
 ### -ManagedFolderMailboxPolicyAllowed
-This parameter is available or functional only in Exchange Server 2010.
+This parameter is available in Exchange Server 2010.
 
 The ManagedFolderMailboxPolicyAllowed parameter specifies whether to bypass the warning that messaging records management (MRM) features aren't supported for  clients using versions of Outlook earlier than Office Outlook 2007. When a managed folder mailbox policy is assigned to a mailbox using the ManagedFolderMailboxPolicy parameter, the warning appears by default unless the ManagedFolderMailboxPolicyAllowed parameter is used.
 

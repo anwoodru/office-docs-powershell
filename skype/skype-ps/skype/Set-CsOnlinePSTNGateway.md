@@ -21,8 +21,8 @@ Modifies the previously defined Session Border Controller (SBC) Configuration th
 Set-CsOnlinePSTNGateway [-Tenant <System.Guid>] [-SipSignalingPort <Int32>] [-FailoverTimeSeconds <Int32>] 
 [-ForwardCallHistory <Boolean>]  [-ForwardPai <Boolean>] [-SendSipOptions <Boolean>] 
 [-MaxConcurrentSessions <System.Int32>]  [-Enabled <Boolean>] [-MediaBypass <Boolean>] [-GatewaySiteId <String>] 
-[-GatewaySiteLbrEnabled <Boolean>] [-MediaRelayRoutingLocationOverride] [-Identity <XdsGlobalRelativeIdentity>] 
-[-BypassMode <String>] [-GenerateRingingWhileLocatingUser <Boolean>] 
+[-GatewaySiteLbrEnabled <Boolean>] [-MediaRelayRoutingLocationOverride <String>] [-Identity <XdsGlobalRelativeIdentity>] 
+[-BypassMode <String>]  
 [-InboundTeamsNumberTranslationRules <String>] [-InboundPSTNNumberTranslationRules <String>] 
 [-OutboundTeamsNumberTranslationRules <String>] [-PidfloSupported <Boolean>] [-OutboundPSTNNumberTranslationRules <String>] 
 [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -199,10 +199,12 @@ Accept wildcard characters: False
 ```
 
 ### -MediaRelayRoutingLocationOverride
-Allows selecting path for media manually. Direct Routing assigns a datacenter for media path based on the public IP of the SBC. We always select closest to the SBC datacenter. However, in some cases a public IP from for example a US range can be assigned to an SBC located in Europe. In this case we will be using not optimal media path. This parameter allows manually set the preferred region for media traffic. We only recommend setting this parameter if the call logs clearly indicate that automatic assignment of the datacenter for media path does not assign the closest to the SBC datacenter
+This parameter is reserved for use with managed carriers.
+
+Allows selecting path for media manually. Direct Routing assigns a datacenter for media path based on the public IP of the SBC. We always select closest to the SBC datacenter. However, in some cases a public IP from for example a US range can be assigned to an SBC located in Europe. In this case we will be using not optimal media path. We only recommend setting this parameter if the call logs clearly indicate that automatic assignment of the datacenter for media path does not assign the closest to the SBC datacenter.
 
 ```yaml
-Type: Boolean
+Type: String
 Parameter Sets: (All)
 Aliases:
 Applicable: Microsoft Teams
@@ -302,19 +304,6 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-### -GenerateRingingWhileLocatingUser
-This parameter is applicable only for Direct Routing in non-media bypass mode. Sometimes inbound calls from the public switched telephone network (PSTN) to Teams clients can take longer than expected to be established. This can occur for various reasons. When this happens, the caller might not hear anything, the Teams client doesn't ring, and some telecommunications providers might cancel the call. This parameter helps to avoid unexpected silences that can occur in this scenario. When enabled for inbound calls from the PSTN to Teams clients, a distinctive audio signal is played to the caller to indicate that Teams is in the process of establishing the call.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases: 
-Required: False
-Position: Named
-Default value: True
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -InboundTeamsNumberTranslationRules
 This parameter assigns an ordered list of Teams translation rules, that apply to Teams numbers on inbound direction.
@@ -344,7 +333,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OutbundTeamsNumberTranslationRulesList
+### -OutboundTeamsNumberTranslationRulesList
 Creates an ordered list of Teams translation rules, that apply to Teams Number on outbound direction.
 
 ```yaml

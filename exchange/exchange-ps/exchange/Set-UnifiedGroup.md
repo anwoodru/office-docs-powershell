@@ -63,6 +63,7 @@ Set-UnifiedGroup [-Identity] <UnifiedGroupIdParameter>
  [-GrantSendOnBehalfTo <MultiValuedProperty>]
  [-HiddenFromAddressListsEnabled <Boolean>]
  [-HiddenFromExchangeClientsEnabled]
+ [-InformationBarrierMode <GroupInformationBarrierMode>]
  [-Language <CultureInfo>]
  [-MailboxRegion <String>]
  [-MailTip <String>]
@@ -75,6 +76,7 @@ Set-UnifiedGroup [-Identity] <UnifiedGroupIdParameter>
  [-PrimarySmtpAddress <SmtpAddress>]
  [-RejectMessagesFromSendersOrMembers <MultiValuedProperty>]
  [-RequireSenderAuthenticationEnabled <Boolean>]
+ [-SensitivityLabelId <Sustem.Guid>]
  [-SubscriptionEnabled]
  [-UnifiedGroupWelcomeMessageEnabled]
  [-WhatIf]
@@ -187,7 +189,7 @@ Accept wildcard characters: False
 ### -Alias
 The Alias parameter specifies the Exchange alias (also known as the mail nickname) for the Microsoft 365 Group. This value identifies the recipient as a mail-enabled object, and shouldn't be confused with multiple email addresses for the same recipient (also known as proxy addresses). A recipient can have only one Alias value.
 
-The value of Alias can contain letters, numbers and the characters: ``! # $ % & ' * + - / = ? ^ _ ` { | } ~``. Periods (.) are allowed, but each period must be surrounded by other valid characters (for example, help.desk). Unicode characters from U+00A1 to U+00FF are also allowed. The maximum length of the Alias value is 64 characters.
+The value of Alias can contain letters, numbers and the following characters: !, #, $, %, &, ', \*, +, -, /, =, ?, ^, \_, \`, {, }, |, and ~. Periods (.) are allowed, but each period must be surrounded by other valid characters (for example, help.desk). Unicode characters from U+00A1 to U+00FF are also allowed. The maximum length of the Alias value is 64 characters.
 
 ```yaml
 Type: String
@@ -246,7 +248,7 @@ Accept wildcard characters: False
 ```
 
 ### -AutoSubscribeNewMembers
-The AutoSubscribeNewMembers switch specifies whether to automatically subscribe new members that are added to the Microsoft 365 Group to conversations and calendar events. Only users that are added to the group after you enable this setting are automatically subscribed to the group..
+The AutoSubscribeNewMembers switch specifies whether to automatically subscribe new members that are added to the Microsoft 365 Group to conversations and calendar events. Only users that are added to the group after you enable this setting are automatically subscribed to the group.
 
 - To subscribe new members to conversations and calendar events, use the AutoSubscribeNewMembers switch without a value.
 - If you don't want to subscribe new members to conversations and calendar events, use this exact syntax: -AutoSubscribeNewMembers:$false.
@@ -811,7 +813,7 @@ Accept wildcard characters: False
 The HiddenFromAddressListsEnabled parameter specifies whether the Microsoft 365 Group appears in the global address list (GAL) and other address lists in your organization. Valid values are:
 
 - $true: The Microsoft 365 Group is hidden from the GAL and other address lists. The group can still receive messages, but users can't search for or browse to the group in Outlook or Outlook on the web. Users also can't find the group by using the Discover option in Outlook on the web. For users that are members of the Microsoft 365 Group, the group will still appear in the navigation pane in Outlook and Outlook on the web if HiddenFromExchangeClientsEnabled property is **NOT** enabled.
-- $false: The Microsoft 365 Group is visible in the GAL and other address lists. This is the default value.
+- $false: The Microsoft 365 Group is visible in the GAL and other address lists.
 
 ```yaml
 Type: Boolean
@@ -834,6 +836,27 @@ The HiddenFromExchangeClientsEnabled switch specifies whether the Microsoft 365 
 
 ```yaml
 Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InformationBarrierMode
+The InformationBarrierMode parameter specifies the information barrier mode for the Microsoft 365 Group. Valid values are:
+
+- Explicit
+- Implicit
+- Open
+- OwnerModerated
+
+```yaml
+Type: GroupInformationBarrierMode
 Parameter Sets: (All)
 Aliases:
 Applicable: Exchange Online
@@ -1116,11 +1139,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SensitivityLabelId
+This parameter is available only in the cloud-based service.
+
+{{ Fill SensitivityLabelId Description }}
+
+```yaml
+Type: System.Guid
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -SubscriptionEnabled
-The SubscriptionEnabled switch specifies whether subscriptions to conversations and calendar events are enabled for the Microsoft 365 Group.
+The SubscriptionEnabled switch specifies whether the group owners can enable subscription to conversations and calendar events on the groups they own. This option can be set only in Exchange Online PowerShell.
 
 - To change the value to $true, use this switch without a value.
-- To change the value to $false, use this exact syntax: -SubscriptionEnabled:$false.
+- To change the value to $false, use this exact syntax: -SubscriptionEnabled:$false. The value of the AutoSubscribeNewMembers parameter must also be $false before you can use the value $false for this switch.
+
+**Note**: You should use the value $false for this parameter only if you intend to disable group owner ability to change subscription options on the group. Group owners will not be able to enable subscription options on the group settings using Outlook on the web or Outlook desktop. Group owners might see the error, "The group update is in progress" error when they try to enable Subscription option. Admins trying to enable Subscription from Microsoft admin center might also see error, "Can't save 'Send copies of group conversations and events to group member's inboxes' Either your assigned product license doesn't include Exchange Online or you have recently created this group and it's still not ready for management".
 
 ```yaml
 Type: SwitchParameter

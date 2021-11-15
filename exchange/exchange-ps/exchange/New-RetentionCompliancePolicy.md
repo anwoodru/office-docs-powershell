@@ -14,7 +14,7 @@ ms.reviewer:
 ## SYNOPSIS
 This cmdlet is available only in Security & Compliance Center PowerShell. For more information, see [Security & Compliance Center PowerShell](https://docs.microsoft.com/powershell/exchange/scc-powershell).
 
-Use the New-RetentionCompliancePolicy cmdlet to create new retention policies in the Security & Compliance Center.
+Use the New-RetentionCompliancePolicy cmdlet to create new retention policies in the Microsoft 365 compliance center.
 
 For information about the parameter sets in the Syntax section below, see [Exchange cmdlet syntax](https://docs.microsoft.com/powershell/exchange/exchange-cmdlet-syntax).
 
@@ -23,9 +23,9 @@ For information about the parameter sets in the Syntax section below, see [Excha
 ### Default
 ```
 New-RetentionCompliancePolicy [-Name] <String>
+ [-Applications <MultiValuedProperty>]
  [-Comment <String>]
  [-Confirm]
- [-DynamicScopeLocation <MultiValuedProperty>]
  [-Enabled <Boolean>]
  [-ExchangeLocation <MultiValuedProperty>]
  [-ExchangeLocationException <MultiValuedProperty>]
@@ -36,6 +36,7 @@ New-RetentionCompliancePolicy [-Name] <String>
  [-OneDriveLocationException <MultiValuedProperty>]
  [-PublicFolderLocation <MultiValuedProperty>]
  [-RestrictiveRetention <Boolean>]
+ [-RetainCloudAttachment <Boolean>]
  [-SharePointLocation <MultiValuedProperty>]
  [-SharePointLocationException <MultiValuedProperty>]
  [-SkypeLocation <MultiValuedProperty>]
@@ -52,6 +53,7 @@ New-RetentionCompliancePolicy [-Name] <String>
  [-Enabled <Boolean>]
  [-Force]
  [-RestrictiveRetention <Boolean>]
+ [-RetainCloudAttachment <Boolean>]
  [-TeamsChannelLocation <MultiValuedProperty>]
  [-TeamsChannelLocationException <MultiValuedProperty>]
  [-TeamsChatLocation <MultiValuedProperty>]
@@ -61,18 +63,20 @@ New-RetentionCompliancePolicy [-Name] <String>
 ```
 
 ## DESCRIPTION
-New policies are not valid and will not be applied until a retention rule is added to the policy. In addition, at least one location parameter must be defined to create a retention policy.
+New policies are not valid and will not be applied until a retention rule is added to the policy. For more information, see [New-RetentionComplianceRule](New-RetentionComplianceRule.md). In addition, at least one location parameter must be defined to create a retention policy.
 
-You need to be assigned permissions in the Security & Compliance Center before you can use this cmdlet. For more information, see [Permissions in the Security & Compliance Center](https://docs.microsoft.com/microsoft-365/security/office-365-security/permissions-in-the-security-and-compliance-center).
+To use this cmdlet in Security & Compliance Center PowerShell, you need to be assigned permissions. For more information, see [Permissions in the Microsoft 365 compliance center](https://docs.microsoft.com/microsoft-365/compliance/microsoft-365-compliance-center-permissions).
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
 New-RetentionCompliancePolicy -Name "Regulation 123 Compliance" -ExchangeLocation "Kitty Petersen", "Scott Nakamura" -SharePointLocation "https://contoso.sharepoint.com/sites/teams/finance"
+New-RetentionComplianceRule -Name RetUnlimited -Policy "Regulation 123 Compliance" -RetentionDuration Unlimited
 ```
 
-This example creates a retention policy named "Regulation 123 Compliance" for the mailboxes of Kitty Petersen and Scott Nakamura, and the finance SharePoint Online site.
+The first command in this example creates a retention policy named "Regulation 123 Compliance" for the mailboxes of Kitty Petersen and Scott Nakamura, and the finance SharePoint Online site.
+The second command creates a new retention rule named "RetUnlimited" and adds it to the retention policy created with the fist command.
 
 ## PARAMETERS
 
@@ -87,6 +91,27 @@ Applicable: Security & Compliance Center
 
 Required: True
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Applications
+The Applications parameter specifies the target when Microsoft 365 Groups are included in the policy (the ModernGroups parameter is set). Valid values are:
+
+- `Group:Exchange` for the mailbox that's connected to the Microsoft 365 Group.
+- `Group:SharePoint` for the SharePoint site that's connected to the Microsoft 365 Group.
+- `"Group:Exchange,SharePoint"` for both the mailbox and the SharePoint site that are connected to the Microsoft 365 Group.
+- blank (`$null`): This is the default value, and is functionally equivalent to the value `"Group:Exchange,SharePoint"`.
+
+```yaml
+Type: MultiValuedProperty
+Parameter Sets: Default
+Aliases:
+Applicable: Security & Compliance Center
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -118,22 +143,6 @@ The Confirm switch specifies whether to show or hide the confirmation prompt. Ho
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
-Applicable: Security & Compliance Center
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DynamicScopeLocation
-{{Fill DynamicScopeLocation Description}}
-
-```yaml
-Type: MultiValuedProperty
-Parameter Sets: Default
-Aliases:
 Applicable: Security & Compliance Center
 
 Required: False
@@ -351,6 +360,22 @@ The RestrictiveRetention parameter specifies whether Preservation Lock is enable
 After a policy has been locked, no one can turn off or disable it, or remove content from the policy. And it's not possible to modify or delete content that's subject to the policy during the retention period. The only ways that you can modify the retention policy are by adding content to it, or extending its duration. A locked policy can be increased or extended, but it can't be reduced, disabled, or turned off.
 
 Therefore, before you lock a retention policy, it's critical that you understand your organization's compliance requirements, and that you don't lock a policy until you are certain that it's what you need.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: Security & Compliance Center
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RetainCloudAttachment
+This parameter is reserved for internal Microsoft use.
 
 ```yaml
 Type: Boolean

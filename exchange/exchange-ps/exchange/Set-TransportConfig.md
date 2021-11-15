@@ -25,6 +25,7 @@ Set-TransportConfig [[-Identity] <OrganizationIdParameter>]
  [-AddressBookPolicyRoutingEnabled <Boolean>]
  [-AgentGeneratedMessageLoopDetectionInSmtpEnabled <Boolean>]
  [-AgentGeneratedMessageLoopDetectionInSubmissionEnabled <Boolean>]
+ [-AllowLegacyTLSClients <System.Boolean>]
  [-ClearCategories <Boolean>]
  [-Confirm]
  [-ConvertDisclaimerWrapperToEml <Boolean>]
@@ -48,6 +49,7 @@ Set-TransportConfig [[-Identity] <OrganizationIdParameter>]
  [-InternalDsnReportingAuthority <SmtpDomain>]
  [-InternalDsnSendHtml <Boolean>]
  [-InternalSMTPServers <MultiValuedProperty>]
+ [-JournalMessageExpirationDays <Int32>]
  [-JournalingReportNdrTo <SmtpAddress>]
  [-LegacyJournalingMigrationEnabled <Boolean>]
  [-MaxAllowedAgentGeneratedMessageDepth <UInt32>]
@@ -59,9 +61,12 @@ Set-TransportConfig [[-Identity] <OrganizationIdParameter>]
  [-MaxRetriesForLocalSiteShadow <Int32>]
  [-MaxRetriesForRemoteSiteShadow <Int32>]
  [-MaxSendSize <Unlimited>]
- [-OrganizationFederatedMailbox <SmtpAddress>]
  [-QueueDiagnosticsAggregationInterval <EnhancedTimeSpan>]
  [-RejectMessageOnShadowFailure <Boolean>]
+ [-ReplyAllStormBlockDurationHours <Int32>]
+ [-ReplyAllStormDetectionMinimumRecipients <Int32>]
+ [-ReplyAllStormDetectionMinimumReplies <Int32>]
+ [-ReplyAllStormProtectionEnabled <Boolean>]
  [-Rfc2231EncodingEnabled <Boolean>]
  [-SafetyNetHoldTime <EnhancedTimeSpan>]
  [-ShadowHeartbeatFrequency <EnhancedTimeSpan>]
@@ -107,13 +112,15 @@ To avoid journaling issues, we recommend that you set JournalingReportNdrTo to a
 ## PARAMETERS
 
 ### -Identity
+This parameter is available only in on-premises Exchange.
+
 This parameter is reserved for internal Microsoft use.
 
 ```yaml
 Type: OrganizationIdParameter
 Parameter Sets: (All)
 Aliases:
-Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019, Exchange Online
+Applicable: Exchange Server 2010, Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
 
 Required: False
 Position: 1
@@ -176,6 +183,24 @@ Type: Boolean
 Parameter Sets: (All)
 Aliases:
 Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AllowLegacyTLSClients
+This parameter is available only in the cloud-based service.
+
+{{ Fill AllowLegacyTLSClients Description }}
+
+```yaml
+Type: System.Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
 
 Required: False
 Position: Named
@@ -398,8 +423,8 @@ Accept wildcard characters: False
 ### -ExternalDsnSendHtml
 The ExternalDsnSendHtml parameter specifies whether external DSN messages should be HTML or plain text. Valid values are:
 
-- $true: DSNs are HTML. This is the default value.
-- $false: DSNs are plain text.
+- $true: External DSNs are HTML. This is the default value.
+- $false: External DSNs are plain text.
 
 ```yaml
 Type: Boolean
@@ -494,7 +519,7 @@ Accept wildcard characters: False
 ```
 
 ### -HeaderPromotionModeSetting
-The HeaderPromotionModeSetting parameter specifies whether named properties are created for custom X-headers on messages received from outside the Exchange organization. Valid values are:
+The HeaderPromotionModeSetting parameter specifies whether named properties are created for custom X-headers on messages received. Valid values are:
 
 - MustCreate: Exchange creates a named property for each new custom X-header.
 - MayCreate: Exchange creates a named property for each new custom X-header on messages received from authenticated senders. No named properties are created for custom X-headers on messages received from unauthenticated senders.
@@ -609,8 +634,8 @@ Accept wildcard characters: False
 ### -InternalDsnSendHtml
 The InternalDsnSendHtml parameter specifies whether internal DSN messages should be HTML or plain text. Valid values are:
 
-- $true: DSNs are HTML. This is the default value.
-- $false: DSNs are plain text.
+- $true: Internal DSNs are HTML. This is the default value.
+- $false: Internal DSNs are plain text.
 
 ```yaml
 Type: Boolean
@@ -647,8 +672,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -JournalMessageExpirationDays
+This parameter is available only in the cloud-based service.
+
+The JournalMessageExpirationDays parameter extends the number of days that undeliverable journal reports are queued before they expire. A valid value is an integer from 0 to 7. The default value is 0, which means undeliverable journal reports are treated like regular undeliverable messages.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -JournalingReportNdrTo
-The JournalingReportNdrTo parameter specifies the email address to which journal reports are sent if the journaling mailbox is unavailable. By default, if this parameter is left empty, Exchange continues to try to deliver the journal report to the journaling mailbox. We recommended that you use a dedicated (non-user) mailbox as the argument to JournalingReportNdrTo.
+The JournalingReportNdrTo parameter specifies the email address to which journal reports are sent if the journaling mailbox is unavailable. By default, if this parameter is left empty, Exchange continues to try to deliver the journal report to the journaling mailbox. We recommended that you use a dedicated (non-user) mailbox as the value for this parameter.
 
 ```yaml
 Type: SmtpAddress
@@ -664,7 +707,7 @@ Accept wildcard characters: False
 ```
 
 ### -LegacyJournalingMigrationEnabled
-This parameter is available or functional only in Exchange Server 2010.
+This parameter is available only in Exchange Server 2010.
 
 The LegacyJournalingMigrationEnabled parameter specifies whether journal messages generated in Microsoft Exchange Server 2003 will be reformatted by Exchange 2010.
 
@@ -917,24 +960,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OrganizationFederatedMailbox
-This parameter is available or functional only in Exchange Server 2010.
-
-The OrganizationFederatedMailbox parameter specifies the SMTP address of the federated mailbox used for federated delivery with other organizations.
-
-```yaml
-Type: SmtpAddress
-Parameter Sets: (All)
-Aliases:
-Applicable: Exchange Server 2010
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -QueueDiagnosticsAggregationInterval
 This parameter is available only in on-premises Exchange.
 
@@ -970,6 +995,78 @@ Type: Boolean
 Parameter Sets: (All)
 Aliases:
 Applicable: Exchange Server 2013, Exchange Server 2016, Exchange Server 2019
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReplyAllStormBlockDurationHours
+This parameter is available only in the cloud-based service.
+
+{{ Fill ReplyAllStormBlockDurationHours Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReplyAllStormDetectionMinimumRecipients
+This parameter is available only in the cloud-based service.
+
+{{ Fill ReplyAllStormDetectionMinimumRecipients Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReplyAllStormDetectionMinimumReplies
+This parameter is available only in the cloud-based service.
+
+{{ Fill ReplyAllStormDetectionMinimumReplies Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReplyAllStormProtectionEnabled
+This parameter is available only in the cloud-based service.
+
+{{ Fill ReplyAllStormProtectionEnabled Description }}
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+Applicable: Exchange Online
 
 Required: False
 Position: Named
@@ -1285,7 +1382,7 @@ Accept wildcard characters: False
 ### -TransportRuleAttachmentTextScanLimit
 This parameter is available only in on-premises Exchange.
 
-The TransportRuleAttachmentTextScanLimit parameter specifies the maximum size of text to extract from attachments for scanning by attachment scanning predicates in transport rules and data loss prevention (DLP) policies. The default value is 150 kilobytes (KB).
+The TransportRuleAttachmentTextScanLimit parameter specifies the maximum size of text to extract from attachments for scanning by attachment scanning predicates in transport rules and data loss prevention (DLP) policies.
 
 When you enter a value, qualify the value with one of the following units:
 
@@ -1295,6 +1392,8 @@ When you enter a value, qualify the value with one of the following units:
 - GB (gigabytes)
 
 Unqualified values are typically treated as bytes, but small values may be rounded up to the nearest kilobyte.
+
+In Exchange Online, Exchange 2019, and Exchange 2016, the default value is 1 MB (1,048,576 bytes). In Exchange 2013, the default value is 150 KB (153,600 bytes).
 
 If the amount of text in the attachment is larger than the value of this parameter, only the specified amount of text is scanned. For example, if a 5 megabyte attachment contains 300 kilobytes of text, and the value of TransportRuleAttachmentTextScanLimit is 150 kilobytes, only the first 150 kilobytes of text are extracted and scanned.
 

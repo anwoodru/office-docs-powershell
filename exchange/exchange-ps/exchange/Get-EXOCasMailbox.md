@@ -153,7 +153,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -### -ExternalDirectoryObjectId
+### -ExternalDirectoryObjectId
 The ExternalDirectoryObjectId parameter identifies the mailbox that you want to view by the ObjectId in Azure Active Directory.
 
 You can't use this parameter with the Anr, Identity, PrimarySmtpAddress, or UserPrincipalName parameters.
@@ -434,7 +434,6 @@ The following Get-CasMailbox parameters are not available or supported in Get-EX
 - IgnoreDefaultScope
 - ReadIsOptimizedForAccessibility
 - SortBy
-
 
 ## OUTPUTS
 

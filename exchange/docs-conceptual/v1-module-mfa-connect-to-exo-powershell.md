@@ -5,9 +5,10 @@ author: chrisda
 manager: dansimp
 ms.date:
 ms.audience: Admin
+audience: Admin
 ms.topic: article
 ms.service: exchange-powershell
-localization_priority: Normal
+ms.localizationpriority: medium
 ms.assetid:
 search.appverid: MET150
 ROBOTS: NOINDEX
@@ -17,13 +18,15 @@ description: "Admins can learn how to use the older Exchange Online Remote Power
 # V1 module - Connect to Exchange Online PowerShell using MFA
 
 > [!NOTE]
-> The older Exchange Online Remote PowerShell Module that's described in this topic will eventually be retired. The Exchange Online PowerShell V2 module (EXO V2 module) supports MFA, so we suggest using it instead. For instructions, see [Connect to Exchange Online PowerShell](connect-to-exchange-online-powershell.md).
+> The older Exchange Online Remote PowerShell Module that's described in this article will eventually be retired. The Exchange Online PowerShell V2 module (EXO V2 module) supports MFA, so we suggest using it instead. For instructions, see [Connect to Exchange Online PowerShell](connect-to-exchange-online-powershell.md).
 
 If you want to use multi-factor authentication (MFA) to connect to Exchange Online PowerShell, you can't use the instructions at [Basic auth - Connect to Exchange Online PowerShell](basic-auth-connect-to-exo-powershell.md) to use remote PowerShell to connect to Exchange Online. MFA requires you to install the Exchange Online Remote PowerShell Module, and use the **Connect-EXOPSSession** cmdlet to connect.
 
 ## What do you need to know before you begin?
 
 - Estimated time to complete: 5 minutes
+
+- After you connect, the cmdlets and parameters that you have or don't have access to is controlled by role-based access control (RBAC). For more information, see [Permissions in Exchange Online](/exchange/permissions-exo/permissions-exo).
 
 - You can use the following versions of Windows:
 
@@ -35,7 +38,7 @@ If you want to use multi-factor authentication (MFA) to connect to Exchange Onli
   - Windows 7 Service Pack 1 (SP1)<sup>*</sup>
   - Windows Server 2008 R2 SP1<sup>*</sup>
 
-  <sup>\*</sup> This version of Windows has reached end of support, and is now only supported when running in Azure virtual machines. To use this version of Windows, you need to install the Microsoft .NET Framework 4.5 or later and then an updated version of the Windows Management Framework: 3.0, 4.0, or 5.1 (only one). For more information, see [Install the .NET Framework](https://docs.microsoft.com/dotnet/framework/install/on-windows-7), [Windows Management Framework 3.0](https://aka.ms/wmf3download), [Windows Management Framework 4.0](https://aka.ms/wmf4download), and [Windows Management Framework 5.1](https://aka.ms/wmf5download).
+  <sup>\*</sup> This version of Windows has reached end of support, and is now supported only in Azure virtual machines. To use this version of Windows, you need to install the Microsoft .NET Framework 4.5 or later and then an updated version of the Windows Management Framework: 3.0, 4.0, or 5.1 (only one). For more information, see [Install the .NET Framework](/dotnet/framework/install/on-windows-7), [Windows Management Framework 3.0](https://aka.ms/wmf3download), [Windows Management Framework 4.0](https://aka.ms/wmf4download), and [Windows Management Framework 5.1](https://aka.ms/wmf5download).
 
 - WinRM needs to allow Basic authentication (it's enabled by default). We don't send the username and password combination, but the Basic authentication header is required to send the session's OAuth token, since the client-side WinRM implementation has no support for OAuth.
 
@@ -66,19 +69,19 @@ If you want to use multi-factor authentication (MFA) to connect to Exchange Onli
 
 You need to do the following steps in a browser that supports ClickOnce (for example, Internet Explorer or Edge):
 
-  **Note**: ClickOnce support is available in the Chromium-based version of Edge at <edge://flags/#edge-click-once>, and might not be enabled by default.
+  **Note**: ClickOnce support is available in the Chromium-based version of Edge at `edge://flags/#edge-click-once`, and might not be enabled by default.
 
-  1. Open the Exchange admin center (EAC) for your Exchange Online organization. For instructions, see [Exchange admin center in Exchange Online](https://docs.microsoft.com/exchange/exchange-admin-center).
+  1. Open the Exchange admin center (EAC) for your Exchange Online organization. For instructions, see [Exchange admin center in Exchange Online](/exchange/exchange-admin-center).
 
   2. In the EAC, go to **Hybrid** > **Setup** and click the appropriate **Configure** button to download the Exchange Online Remote PowerShell Module for multi-factor authentication.
 
-     ![Download the Exchange Online PowerShell Module from the Hybrid tab in the EAC](media/24645e56-8b11-4c0f-ace4-09bdb2703562.png)
+     ![Download the Exchange Online PowerShell Module from the Hybrid tab in the EAC.](media/24645e56-8b11-4c0f-ace4-09bdb2703562.png)
 
   3. In the **Application Install** window that opens, click **Install**.
 
-     ![Click Install in the Exchange Online PowerShell Module window](media/0fd389a1-a32d-4e2f-bf5f-78e9b6407d4c.png)
+     ![Click Install in the Exchange Online PowerShell Module window.](media/0fd389a1-a32d-4e2f-bf5f-78e9b6407d4c.png)
 
-- When you use the Exchange Online Remote PowerShell Module, your session will end after one hour, which can be problematic for long-running scripts or processes. To avoid this issue, use [Trusted IPs](https://docs.microsoft.com/azure/active-directory/authentication/howto-mfa-mfasettings#trusted-ips) to bypass MFA for connections from your intranet. Trusted IPs allow you to connect to Exchange Online PowerShell from your intranet using the old instructions at [Basic auth - Connect to Exchange Online PowerShell](basic-auth-connect-to-exo-powershell.md). Also, if you have servers in a datacenter, be sure to add their public IP addresses to Trusted IPs as described [here](https://docs.microsoft.com/azure/active-directory/authentication/howto-mfa-mfasettings#enable-the-trusted-ips-feature-by-using-service-settings).
+- When you use the Exchange Online Remote PowerShell Module, your session will end after one hour, which can be problematic for long-running scripts or processes. To avoid this issue, use [Trusted IPs](/azure/active-directory/authentication/howto-mfa-mfasettings#trusted-ips) to bypass MFA for connections from your intranet. Trusted IPs allow you to connect to Exchange Online PowerShell from your intranet using the old instructions at [Basic auth - Connect to Exchange Online PowerShell](basic-auth-connect-to-exo-powershell.md). Also, if you have servers in a datacenter, be sure to add their public IP addresses to Trusted IPs as described [here](/azure/active-directory/authentication/howto-mfa-mfasettings#enable-the-trusted-ips-feature-by-using-service-settings).
 
 > [!TIP]
 > Having problems? Ask for help in the Exchange forums. Visit the forums at: [Exchange Online](https://go.microsoft.com/fwlink/p/?linkId=267542) or [Exchange Online Protection](https://go.microsoft.com/fwlink/p/?linkId=285351).
@@ -96,6 +99,8 @@ You need to do the following steps in a browser that supports ClickOnce (for exa
    - _\<UPN\>_ is your Microsoft 365 work or school account.
 
    - The _\<ConnectionUri\>_ and _\<AzureADUri\>_ values depend on the nature of your Microsoft 365 organization as described in the following table:
+
+     <br>
 
      ****
 
@@ -127,13 +132,13 @@ You need to do the following steps in a browser that supports ClickOnce (for exa
 
 3. In the sign-in window that opens, enter your password, and then click **Sign in**.
 
-   ![Enter your password in the Exchange Online Remote PowerShell window](media/b85d80d9-1043-4c7c-8f14-d87d8d56b188.png)
+   ![Enter your password in the Exchange Online Remote PowerShell window.](media/b85d80d9-1043-4c7c-8f14-d87d8d56b188.png)
 
    A verification code is generated and delivered based on the verification response option that's configured for your account (for example, a text message or the Azure Authenticator app on your mobile phone).
 
 4. In the verification window that opens, enter the verification code, and then click **Sign in**.
 
-   ![Enter your verification code in the Exchange Online Remote PowerShell window](media/d3a405ce-5364-4732-a7bb-2cc9c678da2d.png)
+   ![Enter your verification code in the Exchange Online Remote PowerShell window.](media/d3a405ce-5364-4732-a7bb-2cc9c678da2d.png)
 
 > [!NOTE]
 > Be sure to disconnect the remote PowerShell session when you're finished. If you close the Exchange Online Remote PowerShell Module window without disconnecting the session, you could use up all the remote PowerShell sessions available to you, and you'll need to wait for the sessions to expire. To disconnect all currently open PowerShell sessions in the current window, run the following command:
