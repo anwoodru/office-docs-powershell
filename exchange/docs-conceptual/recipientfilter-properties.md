@@ -2,8 +2,8 @@
 title: "Filterable properties for the RecipientFilter parameter"
 ms.author: chrisda
 author: chrisda
-manager: dansimp
-ms.date:
+manager: orspodek
+ms.date: 09/07/2023
 ms.audience: ITPro
 audience: ITPro
 ms.topic: article
@@ -17,10 +17,10 @@ description: "Learn about the recipient properties that you can use with the Rec
 
 You use the _RecipientFilter_ parameter to create OPATH filters based on the properties of recipient objects in Exchange Server 2016 or later, and Exchange Online. The _RecipientFilter_ parameter is available in the following cmdlets:
 
-- [New-AddressList](/powershell/module/exchange/new-addresslist) and [Set-AddressList](/powershell/module/exchange/set-addresslist)
-- [New-DynamicDistributionGroup](/powershell/module/exchange/new-dynamicdistributiongroup) and [Set-DynamicDistributionGroup](/powershell/module/exchange/set-dynamicdistributiongroup)
-- [New-EmailAddressPolicy](/powershell/module/exchange/new-emailaddresspolicy) and [Set-EmailAddressPolicy](/powershell/module/exchange/set-emailaddresspolicy)
-- [New-GlobalAddressList](/powershell/module/exchange/new-globaladdresslist) and [Set-GlobalAddressList](/powershell/module/exchange/set-globaladdresslist)
+- [New-AddressList](/powershell/module/exchangepowershell/new-addresslist) and [Set-AddressList](/powershell/module/exchangepowershell/set-addresslist)
+- [New-DynamicDistributionGroup](/powershell/module/exchangepowershell/new-dynamicdistributiongroup) and [Set-DynamicDistributionGroup](/powershell/module/exchangepowershell/set-dynamicdistributiongroup)
+- [New-EmailAddressPolicy](/powershell/module/exchangepowershell/new-emailaddresspolicy) and [Set-EmailAddressPolicy](/powershell/module/exchangepowershell/set-emailaddresspolicy)
+- [New-GlobalAddressList](/powershell/module/exchangepowershell/new-globaladdresslist) and [Set-GlobalAddressList](/powershell/module/exchangepowershell/set-globaladdresslist)
 
 ## Filterable recipient properties
 
@@ -36,21 +36,22 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 
 - Not all recipient properties have a corresponding Active Directory property. The LDAP display name value in the table is "n/a" for these properties, which indicates that the property is calculated (likely by Exchange).
 
-- Enclose the whole OPath filter in double quotation marks " ". If the filter contains system values (for example, `$true`, `$false`, or `$null`), use single quotation marks ' ' instead. Although this parameter is a string (not a system block), you can also use braces { }, but only if the filter doesn't contain variables. For more information, see [Additional OPATH syntax information](recipient-filters.md#additional-opath-syntax-information).
+- Enclose the whole OPATH filter in double quotation marks " ". If the filter contains system values (for example, `$true`, `$false`, or `$null`), use single quotation marks ' ' instead. Although this parameter is a string (not a system block), you can also use braces { }, but only if the filter doesn't contain variables. For more information, see [Additional OPATH syntax information](recipient-filters.md#additional-opath-syntax-information).
 
 - You typically use the object's name for properties that require a valid object value (for example, a mailbox, a distribution group, or an email address policy, but the property might also accept the object's distinguished name (DN) or globally unique identifier (GUID). To find the object's DN or GUID, use the **Get-** cmdlet that corresponds to the object's type (for example, `Get-EmailAddressPolicy | Format-List Name,DistinguishedName,GUID`).
 
-- Text string properties that accept wildcard characters require the `-like` operator (for example, `"Property -like 'abc*'"`). In Exchange Online PowerShell, you can't use the wildcard as a prefix (for example, `"Property -like '*abc'"`) is not allowed).
+- Text string properties that accept wildcard characters require the `-like` operator (for example, `"Property -like 'abc*'"`). In Exchange Online PowerShell, you can't use the wildcard as a prefix in **most** parameters (for example, `"Property -like '*abc'"`) isn't allowed).
 
-- The Value column in the table describes the acceptable values for the *filter*, not necessarily for the property itself. For example, a property might obviously contain a date or numeric value, but when you use that property in a filter, it might be treated like a text string (no value check, and wildcards are supported).
+  > [!TIP]
+  > Even if a wildcard prefix works in a filter parameter in Exchange Online PowerShell, we don't recommend using it due to low performance issues.
+
+- The Value column in the table describes the acceptable values for the _filter_, not necessarily for the property itself. For example, a property might obviously contain a date or numeric value, but when you use that property in a filter, it might be treated like a text string (no value check, and wildcards are supported).
 
 - To look for blank or non-blank property values, use the value `$null` (for example, `'Property -eq $null'` or `'Property -ne $null'`).
 
-- For filtering considerations for connections using the Exchange Online PowerShell v2 module, see [Filters in the EXO V2 module](filters-v2.md).
+- For filtering considerations for the nine exclusive **Get-EXO\*** cmdlets in the Exchange Online PowerShell module, see [Filters in the Exchange Online PowerShell module](filters-v2.md).
 
-<br>
-
-****
+- In Exchange Online, you can't use a wildcard character (*) as the first character in the search string.
 
 |Property name|LDAP display name|Value|Comments|
 |---|---|---|---|
@@ -110,16 +111,16 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 |_ElcExpirationSuspensionEndDate_|_msExchELCExpirySuspensionEnd_|Dynamic distribution groups: A date/time value using the time zone and regional settings of the Exchange server. <br> Others: Blank or non-blank.|This property contains a date-time value.|
 |_ElcExpirationSuspensionStartDate_|_msExchELCExpirySuspensionStart_|Dynamic distribution groups: A date/time value using the time zone and regional settings of the Exchange server. <br> Others: Blank or non-blank.|This property contains a date-time value.|
 |_ElcMailboxFlags_|_msExchELCMailboxFlags_|`None` (0), `ExpirationSuspended` (1), `ElcV2` (2), `DisableCalendarLogging` (4),`LitigationHold` (8), `SingleItemRecovery` (16), `ValidArchiveDatabase` (32), `ShouldUseDefaultRetentionPolicy` (128), `EnableSiteMailboxMessageDedup` (256), `ElcProcessingDisabled` (512), or `ComplianceTagHold` (1024).||
-|_EmailAddresses_|_proxyAddresses_|String (wildcards accepted).|This property contains the recipient's email addresses (the primary email address and all proxy addresses).|
+|_EmailAddresses_|_proxyAddresses_|String (wildcards accepted).|This property contains the recipient's email addresses (the primary email address and all proxy addresses). This is the property used to identify inactive mailboxes.|
 |_EmailAddressPolicyEnabled_|n/a|Boolean (`$true` or `$false`)||
 |_EntryId_|_msExchPublicFolderEntryId_|String (wildcards accepted).||
 |_EwsApplicationAccessPolicy_|_msExchEwsApplicationAccessPolicy_|`EnforceAllowList` or `EnforceBlockList`.||
 |_EwsEnabled_|_msExchEwsEnabled_|Integer||
 |_ExchangeGuid_|_msExchMailboxGuid_|String (wildcards accepted).||
-|_ExchangeUserAccountControl_|_msExchUserAccountControl_|For valid values, see [ADS_USER_FLAG_ENUM enumeration](/windows/win32/api/iads/ne-iads-ads_user_flag_enum). The integer values will work as described. Most of the text values won't work as described (even if you remove `ADS_UF` and all underscores).||
+|_ExchangeUserAccountControl_|_msExchUserAccountControl_|For valid values, see [ADS_USER_FLAG_ENUM enumeration](/windows/win32/api/iads/ne-iads-ads_user_flag_enum). The integer values work as described. Most of the text values don't work as described (even if you remove `ADS_UF` and all underscores).||
 |_ExchangeVersion_|_msExchVersion_|Dynamic distribution groups: String (wildcards accepted). <br> Others: `ExchangeObjectVersion` values.||
 |_ExpansionServer_|_msExchExpansionServerName_|String (wildcards accepted).||
-|_ExtensionCustomAttribute1_ to _ExtensionCustomAttribute5_|_msExchExtensionCustomAttribute1_ to _msExchExtensionCustomAttribute5_|String (wildcards accepted).||
+|_ExtensionCustomAttribute1_ to _ExtensionCustomAttribute5_|_msExchExtensionCustomAttribute1_ to _msExchExtensionCustomAttribute5_|String (wildcards accepted).|Currently, these attributes aren't useable as filters in Exchange Online. For more information, see [Microsoft Entra Connect Sync: Attributes synchronized to Microsoft Entra ID](/entra/identity/hybrid/connect/reference-connect-sync-attributes-synchronized).|
 |_ExternalDirectoryObjectId_|_msExchExternalDirectoryObjectId_|String (wildcards accepted).||
 |_ExternalEmailAddress_|_targetAddress_|String (wildcards accepted).|This property contains the external email address for mail contacts and mail users.|
 |_ExternalOofOptions_|_msExchExternalOOFOptions_|`External` (0) or `InternalOnly` (1).||
@@ -166,10 +167,10 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 |_LitigationHoldOwner_|_msExchLitigationHoldOwner_|String (wildcards accepted).||
 |_LocaleID_|_localeID_|Integer|For valid values, [Microsoft Locale ID Values](/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a).|
 |_MailboxMoveBatchName_|_msExchMailboxMoveBatchName_|String (wildcards accepted).||
-|_MailboxMoveFlags_|_msExchMailboxMoveFlags_|For valid values, see the description of the _Flags_ parameter in [Get-MoveRequest](/powershell/module/exchange/get-moverequest).||
+|_MailboxMoveFlags_|_msExchMailboxMoveFlags_|For valid values, see the description of the _Flags_ parameter in [Get-MoveRequest](/powershell/module/exchangepowershell/get-moverequest).||
 |_MailboxMoveRemoteHostName_|_msExchMailboxMoveRemoteHostName_|String (wildcards accepted).||
 |_MailboxMoveSourceMDB_|_msExchMailboxMoveSourceMDBLink_|String (wildcards accepted in dynamic distribution groups).||
-|_MailboxMoveStatus_|_msExchMailboxMoveStatus_|For valid values, see the description of the _MoveStatus_ parameter in [Get-MoveRequest](/powershell/module/exchange/get-moverequest).||
+|_MailboxMoveStatus_|_msExchMailboxMoveStatus_|For valid values, see the description of the _MoveStatus_ parameter in [Get-MoveRequest](/powershell/module/exchangepowershell/get-moverequest).||
 |_MailboxMoveTargetMDB_|_msExchMailboxMoveTargetMDBLink_|String (wildcards accepted in dynamic distribution groups).||
 |_MailboxPlan_|_msExchParentPlanLink_|String (wildcards accepted).|Mailbox plans correspond to Microsoft 365 license types. The availability of a license plans is determined by the selections that you make when you enroll your domain.|
 |_MailboxRelease_|_msExchMailboxRelease_|String (wildcards accepted).||
@@ -184,7 +185,7 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 |_MaxSendSize_|_submissionContLength_|Dynamic distribution groups: A byte quantified size value (for example, `50MB`). Unqualified values are treated as bytes. <br> Others: Blank or non-blank.||
 |_MemberDepartRestriction_|_msExchGroupDepartRestriction_|`Closed` (0), `Open` (1), or `ApprovalRequired` (2).||
 |_MemberJoinRestriction_|_msExchGroupDepartRestriction_|`Closed` (0), `Open` (1), or `ApprovalRequired` (2).||
-|_MemberOfGroup_|_memberOf_|String (wildcards accepted in dynamic distribution groups).||
+|_MemberOfGroup_|_memberOf_|String (wildcards accepted in dynamic distribution groups).|You must use the DistinguishedName. This property only works with groups recognized by Exchange, therefore Microsoft Entra security groups do not work.|
 |_Members_|_member_|String (wildcards accepted in dynamic distribution groups).||
 |_MessageHygieneFlags_|_msExchMessageHygieneFlags_|`None` (0) or `AntispamBypass` (1).||
 |_MobileAdminExtendedSettings_|_msExchOmaAdminExtendedSettings_|String (wildcards accepted).||
@@ -220,9 +221,9 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 |_PopEnabled_|n/a|Boolean (`$true` or `$false`)||
 |_PostalCode_|_postalCode_|String (wildcards accepted).||
 |_PostOfficeBox_|_postOfficeBox_|String (wildcards accepted).||
-|_PreviousRecipientTypeDetails_|_msExchPreviousRecipientTypeDetails_|For valid values, see the description of the _RecipientTypeDetails_ parameter in [Get-Recipient](/powershell/module/exchange/get-recipient).||
+|_PreviousRecipientTypeDetails_|_msExchPreviousRecipientTypeDetails_|For valid values, see the description of the _RecipientTypeDetails_ parameter in [Get-Recipient](/powershell/module/exchangepowershell/get-recipient).||
 |_PrimaryGroupId_|_primaryGroupId_|Integer|For domain users, the value of this property is typically 513, which corresponds to the Domain Users group.|
-|_PrimarySmtpAddress_|n/a|String (wildcards accepted).|Don't use the _PrimarySmtpAddress_ property; use the _EmailAddresses_ property instead. Any filter that uses the _PrimarySmtpAddress_ property will also search values in the _EmailAddresses_ property. For example, if a mailbox has the primary email address dario@contoso.com, and the additional proxy addresses dario2@contoso.com and dario3@contoso.com, all of the following filters will return that mailbox in the result: `"PrimarySmtpAddress -eq 'dario@contoso.com'"`, `"PrimarySmtpAddress -eq 'dario2@contoso.com'"`, or `"PrimarySmtpAddress -eq 'dario3@contoso.com'"`.|
+|_PrimarySmtpAddress_|n/a|String (wildcards accepted).|Don't use the _PrimarySmtpAddress_ property; use the _EmailAddresses_ property instead. Any filter that uses the _PrimarySmtpAddress_ property also searches values in the _EmailAddresses_ property. For example, if a mailbox has the primary email address `dario@contoso.com`, and the additional proxy addresses `dario2@contoso.com` and `dario3@contoso.com`, all of the following filters return that mailbox in the result: `"PrimarySmtpAddress -eq 'dario@contoso.com'"`, `"PrimarySmtpAddress -eq 'dario2@contoso.com'"`, or `"PrimarySmtpAddress -eq 'dario3@contoso.com'"`.|
 |_ProhibitSendQuota_|_mDBOverQuotaLimit_|Dynamic distribution groups: A byte quantified size value (for example, `50MB` or `1.5GB`). Unqualified values are treated as bytes. <br> Others: Blank or non-blank.||
 |_ProhibitSendReceiveQuota_|_mDBOverHardQuotaLimit_|Dynamic distribution groups: A byte quantified size value (for example, `50MB` or `1.5GB`). Unqualified values are treated as bytes. <br> Others: Blank or non-blank.||
 |_ProtocolSettings_|_protocolSettings_|String (wildcards accepted).||
@@ -236,8 +237,8 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 |_RecipientDisplayType_|_msExchRecipientDisplayType_|`MailboxUser` (0), `DistributionGroup` (1), `PublicFolder` (2), `DynamicDistributionGroup` (3), `Organization` (4), `PrivateDistributionList` (5), `RemoteMailUser` (6). `ConferenceRoomMailbox` (7), or `EquipmentMailbox` (8).||
 |_RecipientFilter_|_msExchQueryFilter_|String (wildcards accepted).||
 |_RecipientLimits_|_msExchRecipLimit_|`Unlimited` or an integer.|This property specifies the maximum number of recipients that are allowed in messages sent by the mailbox.|
-|_RecipientType_|n/a|For valid values, see the description of the _RecipientType_ parameter in [Get-Recipient](/powershell/module/exchange/get-recipient).||
-|_RecipientTypeDetails_|n/a|For valid values, see the description of the _RecipientTypeDetails_ parameter in [Get-Recipient](/powershell/module/exchange/get-recipient).||
+|_RecipientType_|n/a|For valid values, see the description of the _RecipientType_ parameter in [Get-Recipient](/powershell/module/exchangepowershell/get-recipient).||
+|_RecipientTypeDetails_|n/a|For valid values, see the description of the _RecipientTypeDetails_ parameter in [Get-Recipient](/powershell/module/exchangepowershell/get-recipient).||
 |_RecoverableItemsQuota_|_msExchDumpsterQuota_|Dynamic distribution groups: A byte quantified size value (for example, `50MB` or `1.5GB`). Unqualified values are treated as bytes. <br> Others: Blank or non-blank.||
 |_RecoverableItemsWarningQuota_|_msExchDumpsterWarningQuota_|Dynamic distribution groups: A byte quantified size value (for example, `50MB` or `1.5GB`). Unqualified values are treated as bytes. <br> Others: Blank or non-blank.||
 |_RejectMessagesFrom_|_unauthOrig_|Dynamic distribution groups: String (wildcards accepted). <br> Others: Blank or non-blank.||
@@ -298,7 +299,7 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 |_UsageLocation_|_msExchUsageLocation_|A valid ISO 3166-1 two-letter country code value or the corresponding display name (for example, `US` or `UnitedStates`). For more information, see [Country Codes - ISO 3166](https://www.iso.org/iso-3166-country-codes.html).||
 |_UseDatabaseQuotaDefaults_|_mDBUseDefaults_|Boolean (`$true` or `$false`)|If the value of this property is $true, the values of these properties are ignored for the mailbox: _IssueWarningQuota_, _ProhibitSendQuota_, _ProhibitSendReceiveQuota_, , _CalendarLoggingQuota_, _RecoverableItemsWarningQuota_, and _RecoverableItemsQuota_.|
 |_UserAccountControl_|_userAccountControl_|For valid values, see the Remarks section in [User-Account-Control attribute](/windows/win32/adschema/a-useraccountcontrol). You need to convert the hexadecimal values to decimal. Most of the text values won't work as described (even if you remove `ADS_UF` and all underscores).||
-|_UserPrincipalName_|_userPrincipalName_|String (wildcards accepted).|This property contains the user principal name (UPN) for this recipient (for example, `kim@contoso.com`).|
+|_UserPrincipalName_|_userPrincipalName_|String (wildcards accepted).|This property contains the user principal name (UPN) for this recipient (for example, `kim@contoso.com`). This property is not supported to identify inactive mailboxes.|
 |_VoiceMailSettings_|_msExchUCVoiceMailSettings_|String (wildcards accepted).|Valid values for this property are: `ExchangeHostedVoiceMail=0`, `ExchangeHostedVoiceMail=1`, `CsHostedVoiceMail=0`, or `CsHostedVoiceMail=1`.|
 |_WebPage_|_wWWHomePage_|String (wildcards accepted).||
 |_WhenChanged_|_whenChanged_|Dynamic distribution groups: A date/time value using the time zone and regional settings of the Exchange server. <br> Others: Blank or non-blank.||
@@ -309,7 +310,6 @@ The recipient properties that have been *confirmed* to work with the _RecipientF
 |_WhenSoftDeleted_|_msExchWhenSoftDeletedTime_|Dynamic distribution groups: A date/time value using the time zone and regional settings of the Exchange server. <br> Others: Blank or non-blank.||
 |_WindowsEmailAddress_|_mail_|String (wildcards accepted).||
 |_WindowsLiveID_|_msExchWindowsLiveID_|String (wildcards accepted).||
-|
 
 ## For more information
 
